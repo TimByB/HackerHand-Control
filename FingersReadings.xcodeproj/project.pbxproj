@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		B004CC191B019AC200876D92 /* BYBGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B004CC181B019AC200876D92 /* BYBGui.cpp */; };
 		B004CC221B02671D00876D92 /* BYBOverlayGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B004CC211B02671D00876D92 /* BYBOverlayGui.cpp */; };
-		B0050EC61AA2445C00A841CC /* FingersClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0050EC31AA2445C00A841CC /* FingersClassifier.cpp */; };
+		B0050EC61AA2445C00A841CC /* FingersClassifierSimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0050EC31AA2445C00A841CC /* FingersClassifierSimple.cpp */; };
 		B02B7A041B161E400051E6B2 /* ofxInteractiveRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B02B7A021B161E400051E6B2 /* ofxInteractiveRect.cpp */; };
+		B02B7A0D1B165F500051E6B2 /* FingerClassifierSVM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B02B7A0B1B165F500051E6B2 /* FingerClassifierSVM.cpp */; };
+		B02B7A0F1B1660590051E6B2 /* BaseFingerClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B02B7A0E1B1660590051E6B2 /* BaseFingerClassifier.cpp */; };
 		B08AB1D71896D50D002D2BA3 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B08AB1C61896D50C002D2BA3 /* ofxBaseGui.cpp */; };
 		B08AB1D81896D50D002D2BA3 /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B08AB1C81896D50C002D2BA3 /* ofxButton.cpp */; };
 		B08AB1D91896D50D002D2BA3 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B08AB1CB1896D50C002D2BA3 /* ofxGuiGroup.cpp */; };
@@ -27,6 +29,7 @@
 		B0D5ADAE1A7231730058A623 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0D5ADA91A7231730058A623 /* tinyxml.cpp */; };
 		B0D5ADAF1A7231730058A623 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0D5ADAB1A7231730058A623 /* tinyxmlerror.cpp */; };
 		B0D5ADB01A7231730058A623 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0D5ADAC1A7231730058A623 /* tinyxmlparser.cpp */; };
+		B0EDCA561B1669AE000D9ABF /* ofxLearn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0EDCA541B1669AE000D9ABF /* ofxLearn.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -90,10 +93,14 @@
 		B004CC251B02AA4000876D92 /* loPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = loPass.h; sourceTree = "<group>"; };
 		B004CC271B02B43F00876D92 /* BYBAccuracyGui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BYBAccuracyGui.h; sourceTree = "<group>"; };
 		B0050EC21AA2445C00A841CC /* Fingers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Fingers.h; sourceTree = "<group>"; };
-		B0050EC31AA2445C00A841CC /* FingersClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FingersClassifier.cpp; sourceTree = "<group>"; };
-		B0050EC41AA2445C00A841CC /* FingersClassifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingersClassifier.h; sourceTree = "<group>"; };
+		B0050EC31AA2445C00A841CC /* FingersClassifierSimple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FingersClassifierSimple.cpp; sourceTree = "<group>"; };
+		B0050EC41AA2445C00A841CC /* FingersClassifierSimple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingersClassifierSimple.h; sourceTree = "<group>"; };
 		B02B7A021B161E400051E6B2 /* ofxInteractiveRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxInteractiveRect.cpp; sourceTree = "<group>"; };
 		B02B7A031B161E400051E6B2 /* ofxInteractiveRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxInteractiveRect.h; sourceTree = "<group>"; };
+		B02B7A0A1B165D750051E6B2 /* BaseFingerClassifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseFingerClassifier.h; sourceTree = "<group>"; };
+		B02B7A0B1B165F500051E6B2 /* FingerClassifierSVM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FingerClassifierSVM.cpp; sourceTree = "<group>"; };
+		B02B7A0C1B165F500051E6B2 /* FingerClassifierSVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FingerClassifierSVM.h; sourceTree = "<group>"; };
+		B02B7A0E1B1660590051E6B2 /* BaseFingerClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseFingerClassifier.cpp; sourceTree = "<group>"; };
 		B03E6F931AA3B8D0000EFF0A /* serialManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialManager.h; sourceTree = "<group>"; };
 		B08AB1C61896D50C002D2BA3 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		B08AB1C71896D50C002D2BA3 /* ofxBaseGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
@@ -125,6 +132,8 @@
 		B0D5ADAB1A7231730058A623 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
 		B0D5ADAC1A7231730058A623 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		B0E3854E1AA004A2007BBA60 /* graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = graph.h; sourceTree = "<group>"; };
+		B0EDCA541B1669AE000D9ABF /* ofxLearn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxLearn.cpp; sourceTree = "<group>"; };
+		B0EDCA551B1669AE000D9ABF /* ofxLearn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLearn.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -183,8 +192,12 @@
 			isa = PBXGroup;
 			children = (
 				B0050EC21AA2445C00A841CC /* Fingers.h */,
-				B0050EC31AA2445C00A841CC /* FingersClassifier.cpp */,
-				B0050EC41AA2445C00A841CC /* FingersClassifier.h */,
+				B0050EC31AA2445C00A841CC /* FingersClassifierSimple.cpp */,
+				B0050EC41AA2445C00A841CC /* FingersClassifierSimple.h */,
+				B02B7A0A1B165D750051E6B2 /* BaseFingerClassifier.h */,
+				B02B7A0E1B1660590051E6B2 /* BaseFingerClassifier.cpp */,
+				B02B7A0B1B165F500051E6B2 /* FingerClassifierSVM.cpp */,
+				B02B7A0C1B165F500051E6B2 /* FingerClassifierSVM.h */,
 			);
 			path = FingerClassifier;
 			sourceTree = "<group>";
@@ -302,9 +315,28 @@
 			path = ../../../addons/ofxXmlSettings/libs;
 			sourceTree = "<group>";
 		};
+		B0EDCA531B1669AE000D9ABF /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B0EDCA541B1669AE000D9ABF /* ofxLearn.cpp */,
+				B0EDCA551B1669AE000D9ABF /* ofxLearn.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxLearn/src;
+			sourceTree = "<group>";
+		};
+		B0EDCA571B166A18000D9ABF /* ofxLearn */ = {
+			isa = PBXGroup;
+			children = (
+				B0EDCA531B1669AE000D9ABF /* src */,
+			);
+			name = ofxLearn;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				B0EDCA571B166A18000D9ABF /* ofxLearn */,
 				B0D5ADA41A7231730058A623 /* ofxXmlSettings */,
 				B0D5AD991A722C020058A623 /* ofxScaleDragRect */,
 				B0D5AD8D1A7210DE0058A623 /* ofxModifierKeys */,
@@ -492,8 +524,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				B0EDCA561B1669AE000D9ABF /* ofxLearn.cpp in Sources */,
 				B004CC191B019AC200876D92 /* BYBGui.cpp in Sources */,
-				B0050EC61AA2445C00A841CC /* FingersClassifier.cpp in Sources */,
+				B0050EC61AA2445C00A841CC /* FingersClassifierSimple.cpp in Sources */,
 				B0D5ADAE1A7231730058A623 /* tinyxml.cpp in Sources */,
 				B0D5ADAF1A7231730058A623 /* tinyxmlerror.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
@@ -503,12 +536,14 @@
 				B0D5AD951A7210DE0058A623 /* ofxModifierKeys_impl_win.cpp in Sources */,
 				B08AB1D81896D50D002D2BA3 /* ofxButton.cpp in Sources */,
 				B08AB1D91896D50D002D2BA3 /* ofxGuiGroup.cpp in Sources */,
+				B02B7A0F1B1660590051E6B2 /* BaseFingerClassifier.cpp in Sources */,
 				B08AB1DA1896D50D002D2BA3 /* ofxLabel.cpp in Sources */,
 				B0D5ADB01A7231730058A623 /* tinyxmlparser.cpp in Sources */,
 				B004CC221B02671D00876D92 /* BYBOverlayGui.cpp in Sources */,
 				B08AB1DB1896D50D002D2BA3 /* ofxPanel.cpp in Sources */,
 				B08AB1DC1896D50D002D2BA3 /* ofxSlider.cpp in Sources */,
 				B02B7A041B161E400051E6B2 /* ofxInteractiveRect.cpp in Sources */,
+				B02B7A0D1B165F500051E6B2 /* FingerClassifierSVM.cpp in Sources */,
 				B0D5AD941A7210DE0058A623 /* ofxModifierKeys_impl_mac.mm in Sources */,
 				B08AB1DD1896D50D002D2BA3 /* ofxSliderGroup.cpp in Sources */,
 				B08AB1DE1896D50D002D2BA3 /* ofxToggle.cpp in Sources */,
@@ -671,7 +706,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = FingersReadingsDebug;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = ../../../addons/ofxLearn/libs/;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -758,7 +793,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = FingersReadings;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = ../../../addons/ofxLearn/libs/;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

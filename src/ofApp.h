@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "FingersClassifier.h"
+#include "FingersClassifierSimple.h"
+#include "FingerClassifierSVM.h"
 #include "serialManager.h"
 
 class BYBGui;
@@ -23,7 +24,8 @@ public:
 	
 	void newSerialData(vector<unsigned int> & d);
 	
-	FingersClassifier classifier;
+	//FingersClassifierSimple classifier;
+    FingersClassifierSVM classifier;
 	
 	serialManager serial;
 
