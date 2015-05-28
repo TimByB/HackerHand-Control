@@ -5,7 +5,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetVerticalSync(true);
-//	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	ofXml xml;
 	string lang = "en";
 	if (xml.load(ofToDataPath("lang.xml"))) {
@@ -23,6 +23,7 @@ void ofApp::setup(){
 	serial.setup();
 	
 	ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
+//    ofAddListener(classifier.fingerMoved, &serial, &serialManager::moveFinger);
 
 }
 //--------------------------------------------------------------
@@ -34,11 +35,10 @@ void ofApp::newSerialData(vector<unsigned int> & d){
 		originalData[i].back() = d[i];
 		lp[i] = loPass(originalData[i], gui->lopassSize);
 	}
-	classifier.update(originalData, lp);
-	if(gui->update(lp)){//if has peaks
-		classifier.classify(lp);
-		classifier.updatePeak(gui->getLastPeak());
-	}
+	classifier.update(originalData, lp, gui->update(lp), gui->getLastPeak());
+//    if(gui->update(lp)){//if has peaks
+//		classifier.updatePeak(gui->getLastPeak());
+//	}
 }
 //--------------------------------------------------------------
 void ofApp::startCalibration(){
@@ -55,7 +55,7 @@ void ofApp::draw(){
 }
 //--------------------------------------------------------------
 void ofApp::saveFingerProfile(){
-	ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"));//, false);
+	ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"), true);
 	if (res.bSuccess) {
 		classifier.save(res.getPath());
 	}

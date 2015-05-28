@@ -381,6 +381,9 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
 		case 'w':
 			//	bWaitForPeak = true;
 			break;
+        case 'g':
+            bDrawGui ^= true;
+            break;
 		case 'l':
 			controllerPtr->serial.loadOfflineData();
 			break;

@@ -37,7 +37,7 @@ void BYBCalibrationGui::setLanguage(string lang){
 		cout << "Calibration GUI text: ";
 		for (int i = 0; i < c; i++) {
 			text.push_back(xml.getValue("text["+ofToString(i)+"]")); //Value("name"));
-			cout << text.back() ;
+			cout << ", " << i << "  / "<< text.back() ;
 		}
 		cout << endl;
 		xml.setToParent();
@@ -55,8 +55,8 @@ void BYBCalibrationGui::setLanguage(string lang){
 //----------------------------------------------------------------------
 void BYBCalibrationGui::update(int sampleNum, int currentFinger, int totalSamples, bool bNoFingers){
 	//	cout << "CAlibration gui update" << endl;
-	if (bNoFingers && text.size() > 4) {
-		fullText[0] = text[4];
+	if (bNoFingers) {
+		fullText[0] = text.back();
 	}else{
 		if(text.size() > 2 && currentFinger >= 0 && currentFinger < 5){
 			fullText[0] = text[0]+fingerNames[currentFinger]+text[1];
