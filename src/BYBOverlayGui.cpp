@@ -14,25 +14,30 @@ BYBOverlayGui::BYBOverlayGui():bIsEnabled(false),opacity(255){
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::setButtons(){
+    cout << " BYBOverlayGui::setButtons" << endl;
 	buttons.resize(1);
 	buttons[0].name = "X";
 	buttons[0].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
+    arrangeButtons();
+}
+//--------------------------------------------------------------
+void BYBOverlayGui::arrangeButtons(){
 	buttons[0].set(getMaxX() -25, getY() + 5, 20, 20);
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::set(float px, float py, float w, float h){
 	ofRectangle::set(px, py, w, h);
-	setButtons();
+    arrangeButtons();
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::set(const ofPoint& p, float w, float h){
 	ofRectangle::set(p, w, h);
-	setButtons();
+    arrangeButtons();
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::set(const ofRectangle& rect){
 	ofRectangle::set(rect);
-	setButtons();
+    arrangeButtons();
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::enable(bool e){

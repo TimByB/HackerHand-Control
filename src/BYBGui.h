@@ -71,9 +71,9 @@ public:
 	bool getIsCalibrating();
 	
 	ofxPanel gui;
-	ofParameter<int> lopassSize, peakDetSize, numSamples, overlayOpacity, releaseTime;
+	ofParameter<int> lopassSize, peakDetSize, pinkyPeakDetSize, numSamples, overlayOpacity, releaseTime;
 	ofParameter<bool> bUseLoPass;
-	ofParameter<float> loPassFactor, slopeThreshold, peakAtkThresh, peakDcyThresh, releaseThreshold;
+	ofParameter<float> loPassFactor, slopeThreshold, peakAtkThresh, peakDcyThresh, pinkyPeakAtkThresh, pinkyPeakDcyThresh,releaseThreshold;
 
 
 	int getSelectedGraph(){return selectedGraph;}
@@ -108,7 +108,9 @@ public:
     
     void moveFinger (int & f);
     void releaseFinger (int & f);
-	
+    
+    bool bAccuracyTestRunning;
+    void accuracyTestEnded();
 private:
 		int selectedGraph;
     bool movingFinger[5];

@@ -29,7 +29,7 @@ void ofApp::setup(){
     ofAddListener(classifier.fingerReleased, &serial, &serialManager::releaseFinger);
     ofAddListener(classifier.fingerMoved, gui.get(), &BYBGui::moveFinger);
     ofAddListener(classifier.fingerReleased, gui.get(), &BYBGui::releaseFinger);
-
+    
 
 }
 //--------------------------------------------------------------

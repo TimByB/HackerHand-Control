@@ -17,10 +17,11 @@ public:
 	
 	BYBOverlayGui();
 	virtual void setButtons();
+    virtual void arrangeButtons();
     void set(float px, float py, float w, float h);
     void set(const ofPoint& p, float w, float h);
     void set(const ofRectangle& rect);
-	void enable(bool e = true);
+	virtual void enable(bool e = true);
 	bool isEnabled(){return bIsEnabled;}
 	virtual void customDraw(){}
 	virtual void close();

@@ -10,7 +10,8 @@
 #include "ofApp.h"
 //--------------------------------------------------------------
 void BYBGui::setup( string language){
-	ofXml xml;
+    bAccuracyTestRunning = false;
+    ofXml xml;
 	map<int, string> fingerNames;
 	if (xml.load(ofToDataPath("languages/"+language+".xml"))) {
 		xml.setTo("fingers");
@@ -62,9 +63,10 @@ void BYBGui::setup( string language){
 	
 	calibrationGui.setPtr(this);
     accuracyGui.setPtr(this);
-	accuracyGui.setup(language);
-	calibrationGui.setLanguage(language);
 	accuracyGui.set(MARGIN, MARGIN, ofGetWidth() - (2*MARGIN), guiArea.height);
+    accuracyGui.setup(language);
+	calibrationGui.setLanguage(language);
+
 	calibrationGui.set(MARGIN, MARGIN, ofGetWidth() - (2*MARGIN), guiArea.height);
 	
 	calibrationGui.update(0, 0, numSamples, false);
@@ -90,6 +92,11 @@ void BYBGui::setupParameters(){
 	gui.add(peakDetSize.set("peakDetSize", 5, 3, 100));
 	gui.add(peakAtkThresh.set("Peak Attack Threshold", 10, 1, 500));
 	gui.add(peakDcyThresh.set("Peak Decay Threshold", 5, 1, 300));
+    
+    gui.add(pinkyPeakAtkThresh.set("Pinky Peak Attack Threshold", 10, 1, 500));
+    gui.add(pinkyPeakDcyThresh.set("Pinky Peak Decay Threshold", 5, 1, 300));
+    gui.add(pinkyPeakDetSize.set("Pinky PeakDetSize", 5, 3, 100));
+    
 	gui.add(numSamples.set("Num Samples per finger", 5, 1, 20));
 	gui.add(overlayOpacity.set("overlay GUI opacity", 255, 0, 255));
 	gui.add(releaseTime.set("Release Time", 500, 1, 2000));
@@ -100,7 +107,12 @@ void BYBGui::setupParameters(){
 	peakAtkThresh.addListener(this, &BYBGui::peakParamsChanged);
 	peakDcyThresh.addListener(this, &BYBGui::peakParamsChanged);
 	peakDetSize.addListener(this, &BYBGui::peakDetSizeChanged);
-	slopeThreshold.addListener(this, &BYBGui::slopeThresholdChanged);
+    pinkyPeakAtkThresh.addListener(this, &BYBGui::peakParamsChanged);
+    pinkyPeakDcyThresh.addListener(this, &BYBGui::peakParamsChanged);
+    pinkyPeakDetSize.addListener(this, &BYBGui::peakDetSizeChanged);
+
+    
+    slopeThreshold.addListener(this, &BYBGui::slopeThresholdChanged);
 	loPassFactor.addListener(this, &BYBGui::loPassChangedF);
 	bUseLoPass.addListener(this, &BYBGui::useLoPassChanged);
 	lopassSize.addListener(this, &BYBGui::loPassChangedI);
@@ -177,12 +189,18 @@ void BYBGui::moveFinger (int & f){
         movingFinger[f] = true;
         selectedFinger = f;
     }
+    if (bAccuracyTestRunning) {
+        accuracyGui.moveFinger(f);
+    }
 }
 //--------------------------------------------------------------
 void BYBGui::releaseFinger (int & f){
     if (f < 5) {
         movingFinger[f] = false;
         selectedFinger = 6;
+    }
+    if (bAccuracyTestRunning) {
+        accuracyGui.releaseFinger(f);
     }
 }
 
@@ -192,16 +210,25 @@ void BYBGui::updatePeakDetection(){
 	for (int i = 0; i < NUM_GRAPHS; i++) {
 		peaks[i].clear();
 		graphs[i].resetPeaks();
-		for (int k = peakDetSize; k < graphs[i].data.size()-peakDetSize; k++) {
+        
+        int pds =peakDetSize;
+        float pat = peakAtkThresh;
+        float pdt = peakDcyThresh;
+        if(i == 4) {
+            pds = pinkyPeakDetSize;
+            pat = pinkyPeakAtkThresh;
+            pdt = pinkyPeakDcyThresh;
+        }
+		for (int k = pds; k < graphs[i].data.size()-pds; k++) {
 			bool isMax = true;
-			for (int j = k-peakDetSize; j < k +peakDetSize; j++) {
+			for (int j = k-pds; j < k +pds; j++) {
 				if (graphs[i].data[j] > graphs[i].data[k]) {
 					isMax = false;
 				}
 			}
 			if (isMax) {
-				if (graphs[i].data[k] - graphs[i].data[k-peakDetSize] > peakAtkThresh &&
-					graphs[i].data[k] - graphs[i].data[k+peakDetSize] > peakDcyThresh) {
+				if (graphs[i].data[k] - graphs[i].data[k-pds] > pat &&
+					graphs[i].data[k] - graphs[i].data[k+pds] > pdt) {
 					graphs[i].addPeak(k);
 					peaks[i].push_back(k);
 				}
@@ -250,7 +277,7 @@ void BYBGui::draw(){
         gui.draw();
 	}
 	int p;
-	if (getIsCalibrating()) {
+	if (getIsCalibrating() || bAccuracyTestRunning) {
 		p = selectedGraph;
 	}else{
 		//p = controllerPtr->classifier.getPrimaryFinger();
@@ -366,7 +393,14 @@ void BYBGui::calibrateButtonPressed(){
 //--------------------------------------------------------------
 void BYBGui::accuracyButtonPressed(){
 	accuracyGui.enable();
+    bAccuracyTestRunning = true;
 	ofNotifyEvent(startAccuracyTest, this);
+    ofAddListener(accuracyGui.guiClosed, this, &BYBGui::accuracyTestEnded);
+}
+//--------------------------------------------------------------
+void BYBGui::accuracyTestEnded(){
+    bAccuracyTestRunning = false;
+    ofRemoveListener(accuracyGui.guiClosed, this, &BYBGui::accuracyTestEnded);
 }
 //--------------------------------------------------------------
 void BYBGui::setSizes(){
@@ -417,19 +451,23 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
 		case 'S':
 			controllerPtr->classifier.save("fingers");
 			break;
-		case '0':
 		case '1':
 		case '2':
 		case '3':
 		case '4':
-            if (movingFinger[args.key - '0']) {
-            controllerPtr->serial.releaseFinger2(args.key - '0');
-            }else{
-            controllerPtr->serial.moveFinger2(args.key - '0');
-            }
-            movingFinger[args.key - '0'] ^=true;
-			break;
         case '5':
+            if(bAccuracyTestRunning){
+                accuracyGui.currentFinger = args.key - '0' -1;
+            }else{
+            if (movingFinger[args.key - '0' -1]) {
+            controllerPtr->serial.releaseFinger2(args.key - '0' -1);
+            }else{
+            controllerPtr->serial.moveFinger2(args.key - '0' -1);
+            }
+            movingFinger[args.key - '0'-1] ^=true;
+    }
+			break;
+        case '0':
             controllerPtr->serial.moveFinger2(5);
             break;
 		default:

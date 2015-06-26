@@ -22,6 +22,7 @@
 		B08AB1DD1896D50D002D2BA3 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B08AB1D31896D50D002D2BA3 /* ofxSliderGroup.cpp */; };
 		B08AB1DE1896D50D002D2BA3 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B08AB1D51896D50D002D2BA3 /* ofxToggle.cpp */; };
 		B095FE0D1B0E872B00CDA04B /* BYBCalibrationGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B095FE0C1B0E872B00CDA04B /* BYBCalibrationGui.cpp */; };
+		B0AAE5631B18D5C8000690DB /* BYBAccuracyGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AAE5621B18D5C8000690DB /* BYBAccuracyGui.cpp */; };
 		B0D5AD931A7210DE0058A623 /* ofxModifierKeys_impl_linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0D5AD901A7210DE0058A623 /* ofxModifierKeys_impl_linux.cpp */; };
 		B0D5AD941A7210DE0058A623 /* ofxModifierKeys_impl_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D5AD911A7210DE0058A623 /* ofxModifierKeys_impl_mac.mm */; };
 		B0D5AD951A7210DE0058A623 /* ofxModifierKeys_impl_win.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0D5AD921A7210DE0058A623 /* ofxModifierKeys_impl_win.cpp */; };
@@ -121,6 +122,7 @@
 		B08AB1D61896D50D002D2BA3 /* ofxToggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxToggle.h; sourceTree = "<group>"; };
 		B095FE0B1B0E7A6F00CDA04B /* handFingers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = handFingers.h; sourceTree = "<group>"; };
 		B095FE0C1B0E872B00CDA04B /* BYBCalibrationGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BYBCalibrationGui.cpp; sourceTree = "<group>"; };
+		B0AAE5621B18D5C8000690DB /* BYBAccuracyGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BYBAccuracyGui.cpp; sourceTree = "<group>"; };
 		B0D5AD8F1A7210DE0058A623 /* ofxModifierKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxModifierKeys.h; sourceTree = "<group>"; };
 		B0D5AD901A7210DE0058A623 /* ofxModifierKeys_impl_linux.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxModifierKeys_impl_linux.cpp; sourceTree = "<group>"; };
 		B0D5AD911A7210DE0058A623 /* ofxModifierKeys_impl_mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ofxModifierKeys_impl_mac.mm; sourceTree = "<group>"; };
@@ -145,7 +147,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* FingersReadingsDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FingersReadingsDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* BYB_Hand_ControlDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BYB_Hand_ControlDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
@@ -402,7 +404,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* FingersReadingsDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* BYB_Hand_ControlDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -422,6 +424,7 @@
 				B004CC241B0295CB00876D92 /* peakData.h */,
 				B004CC251B02AA4000876D92 /* loPass.h */,
 				B004CC271B02B43F00876D92 /* BYBAccuracyGui.h */,
+				B0AAE5621B18D5C8000690DB /* BYBAccuracyGui.cpp */,
 				B095FE0B1B0E7A6F00CDA04B /* handFingers.h */,
 			);
 			path = src;
@@ -439,9 +442,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* FingersReadings */ = {
+		E4B69B5A0A3A1756003C02F2 /* BYB_Hand_Control */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "FingersReadings" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "BYB_Hand_Control" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -453,9 +456,9 @@
 			dependencies = (
 				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
-			name = FingersReadings;
+			name = BYB_Hand_Control;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* FingersReadingsDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* BYB_Hand_ControlDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -466,7 +469,7 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 			};
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "FingersReadings" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "BYB_Hand_Control" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -487,7 +490,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* FingersReadings */,
+				E4B69B5A0A3A1756003C02F2 /* BYB_Hand_Control */,
 			);
 		};
 /* End PBXProject section */
@@ -525,6 +528,7 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				B0EDCA561B1669AE000D9ABF /* ofxLearn.cpp in Sources */,
+				B0AAE5631B18D5C8000690DB /* BYBAccuracyGui.cpp in Sources */,
 				B004CC191B019AC200876D92 /* BYBGui.cpp in Sources */,
 				B0050EC61AA2445C00A841CC /* FingersClassifierSimple.cpp in Sources */,
 				B0D5ADAE1A7231730058A623 /* tinyxml.cpp in Sources */,
@@ -705,7 +709,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = FingersReadingsDebug;
+				PRODUCT_NAME = BYB_Hand_ControlDebug;
 				USER_HEADER_SEARCH_PATHS = ../../../addons/ofxLearn/libs/;
 				WRAPPER_EXTENSION = app;
 			};
@@ -792,7 +796,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = FingersReadings;
+				PRODUCT_NAME = BYB_Hand_Control;
 				USER_HEADER_SEARCH_PATHS = ../../../addons/ofxLearn/libs/;
 				WRAPPER_EXTENSION = app;
 			};
@@ -801,7 +805,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "FingersReadings" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "BYB_Hand_Control" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -810,7 +814,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "FingersReadings" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "BYB_Hand_Control" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
