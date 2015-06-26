@@ -35,7 +35,7 @@ void BYBGui::setup( string language){
 		if (xml.exists("load")) {
 			loadButton.name = xml.getValue("load");
 		}
-
+        
 	}
 	
 	graphs.resize(NUM_GRAPHS);
@@ -53,7 +53,7 @@ void BYBGui::setup( string language){
 	
 	
 	
-	selectedGraph = -1;
+	selectedGraph = selectedFinger= -1;
 	bNewPeak = false;
 	
 	ofRegisterKeyEvents(this);
@@ -61,13 +61,14 @@ void BYBGui::setup( string language){
 	ofAddListener(ofEvents().windowResized, this, &BYBGui::windowResized);
 	
 	calibrationGui.setPtr(this);
-	accuracyGui.setLanguage(language);
+    accuracyGui.setPtr(this);
+	accuracyGui.setup(language);
 	calibrationGui.setLanguage(language);
 	accuracyGui.set(MARGIN, MARGIN, ofGetWidth() - (2*MARGIN), guiArea.height);
 	calibrationGui.set(MARGIN, MARGIN, ofGetWidth() - (2*MARGIN), guiArea.height);
 	
 	calibrationGui.update(0, 0, numSamples, false);
-
+    
 	logoRect.set(guiArea.x + MARGIN,guiArea.y + MARGIN, logo.getWidth(), logo.getHeight());
 	
 	handImg.setup();
@@ -91,7 +92,10 @@ void BYBGui::setupParameters(){
 	gui.add(peakDcyThresh.set("Peak Decay Threshold", 5, 1, 300));
 	gui.add(numSamples.set("Num Samples per finger", 5, 1, 20));
 	gui.add(overlayOpacity.set("overlay GUI opacity", 255, 0, 255));
-	
+	gui.add(releaseTime.set("Release Time", 500, 1, 2000));
+    gui.add(releaseThreshold.set("Release Threshold", 0.5, 0, 1));
+    
+    
 	overlayOpacity.addListener(this, &BYBGui::opacityChanged);
 	peakAtkThresh.addListener(this, &BYBGui::peakParamsChanged);
 	peakDcyThresh.addListener(this, &BYBGui::peakParamsChanged);
@@ -107,11 +111,11 @@ void BYBGui::setupParameters(){
 //--------------------------------------------------------------
 void BYBGui::setupButtons(){
 	/*
-	loadButton.name = "Load Profile";
-	saveButton.name = "Save Profile";
-	calibrateButton.name = "Calibrate";
-	accuracyButton.name = "Accuracy Test";
-//*/
+     loadButton.name = "Load Profile";
+     saveButton.name = "Save Profile";
+     calibrateButton.name = "Calibrate";
+     accuracyButton.name = "Accuracy Test";
+     //*/
 	loadButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
 	saveButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
 	calibrateButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
@@ -165,8 +169,23 @@ bool BYBGui::update(vector<float> & v){
 }
 //--------------------------------------------------------------
 peakData& BYBGui::getLastPeak(){
-	 return lastPeak;
+    return lastPeak;
 }
+//--------------------------------------------------------------
+void BYBGui::moveFinger (int & f){
+    if (f < 5) {
+        movingFinger[f] = true;
+        selectedFinger = f;
+    }
+}
+//--------------------------------------------------------------
+void BYBGui::releaseFinger (int & f){
+    if (f < 5) {
+        movingFinger[f] = false;
+        selectedFinger = 6;
+    }
+}
+
 //--------------------------------------------------------------
 void BYBGui::updatePeakDetection(){
 	
@@ -228,14 +247,15 @@ void BYBGui::draw(){
 	ofSetColor(255);
 	logo.draw(logoRect);
 	if (bDrawGui) {
-	gui.draw();
+        gui.draw();
 	}
 	int p;
 	if (getIsCalibrating()) {
 		p = selectedGraph;
 	}else{
-		p = controllerPtr->classifier.getPrimaryFinger();
-		handImg.selectFinger(p);
+		//p = controllerPtr->classifier.getPrimaryFinger();
+        p = selectedFinger;
+		handImg.selectFinger(selectedFinger);
 	}
 	if (p >= 0 && p < graphs.size()) {
 		ofPushStyle();
@@ -257,6 +277,13 @@ void BYBGui::draw(){
 	if (!getIsCalibrating()){
 		handImg.draw(ofColor::orange);
 	}
+    if (controllerPtr->serial.isWriting()) {
+        ofPushStyle();
+        ofSetColor(ofColor::red);
+        ofFill();
+        ofDrawCircle(100, 100, 70);
+        ofPopStyle();
+    }
 }
 //--------------------------------------------------------------
 void BYBGui::loPassChangedF(float & f){
@@ -287,7 +314,7 @@ void BYBGui::selectGraph(int i){
 	}
 	handImg.selectFinger(selectedGraph);
 	cout << "selectGraph("<<selectedGraph << ");" << endl;
-
+    
 }
 //--------------------------------------------------------------
 bool BYBGui::getIsCalibrating(){
@@ -362,7 +389,7 @@ void BYBGui::windowResized(ofResizeEventArgs& args){
 void BYBGui::keyPressed(ofKeyEventArgs& args){
 	switch (args.key) {
 		case ' ':
-		//	bUpdateGraphs ^= true;
+            //	bUpdateGraphs ^= true;
 			break;
 		case 'r':
 			for (int i = 0; i < NUM_GRAPHS; i++) {
@@ -379,7 +406,7 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
 			//			addFinger(true);
 			break;
 		case 'w':
-			//	bWaitForPeak = true;
+			controllerPtr->serial.saveData();
 			break;
         case 'g':
             bDrawGui ^= true;
@@ -391,20 +418,20 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
 			controllerPtr->classifier.save("fingers");
 			break;
 		case '0':
-			selectGraph(0);
-			break;
 		case '1':
-			selectGraph(1);
-			break;
 		case '2':
-			selectGraph(2);
-			break;
 		case '3':
-			selectGraph(3);
-			break;
 		case '4':
-			selectGraph(4);
+            if (movingFinger[args.key - '0']) {
+            controllerPtr->serial.releaseFinger2(args.key - '0');
+            }else{
+            controllerPtr->serial.moveFinger2(args.key - '0');
+            }
+            movingFinger[args.key - '0'] ^=true;
 			break;
+        case '5':
+            controllerPtr->serial.moveFinger2(5);
+            break;
 		default:
 			break;
 	}
@@ -429,7 +456,7 @@ void BYBGui::mouseReleased(ofMouseEventArgs& args){
 		}
 	}
 	if (!bInside) {
-	//	cout <<"BYBGui::mouseReleased"<< endl;
+        //	cout <<"BYBGui::mouseReleased"<< endl;
 		selectGraph(-1);
 		
 	}

@@ -25,7 +25,7 @@ public:
 	
 	const vector<vector<float> >& getOriginalData(){return originalData;}
 	vector<vector<float> > originalData;
-	
+	vector<vector<float> > loPassData;
 	void newSerialData(vector<unsigned int> & d);
 	
 #ifdef USE_SVM

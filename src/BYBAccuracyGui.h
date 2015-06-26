@@ -9,13 +9,16 @@
 #pragma once
 #include "BYBOverlayGui.h"
 
+class BYBGui;
 
 class BYBAccuracyGui: public BYBOverlayGui{
 public:
-	
-	
-	void setLanguage(string lang = "en"){}
-	virtual void customDraw(){}
+    void setPtr(BYBGui * p);
+	void setup(string lang = "en");
+	void setLanguage(string lang = "en");
+    void startTest(bool bRandom);
+    void endTest();
+	void customDraw();
 	/*
 	 virtual void close();
 	 virtual bool keyPressed(ofKeyEventArgs& args);
@@ -26,6 +29,13 @@ public:
 	 virtual bool mouseReleased(ofMouseEventArgs& args);
 	 virtual bool mouseScrolled(ofMouseEventArgs& args);
 	 //*/
-	
-	
+	vector<string> text;
+	string fullText [2];
+	map<int, string> fingerNames;
+		BYBGui* guiPtr;
+    bool bIsRandom;
+
+	int testNum, totalTests, correctAnswers, currentFinger;
+    
+    
 };
