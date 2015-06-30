@@ -131,9 +131,10 @@ void BYBAccuracyGui::customDraw(){
             }else{
                 fullText[0] += "\nManual Mode";
             }
+            fullText[1] = "Test num: " + ofToString(testNum)+"\n";
             if (fingerNames.count(currentFinger)) {
                 if (!bIsRandom) {
-                    fullText[1] = text[2]+"\n"+text[3]+"\n";
+                    fullText[1] += text[2]+"\n"+text[3]+"\n";
                     if (fingerNames.size() > 4) {
                         for (int i = 0; i < 5; i++) {
                             if (fingerNames.count(i)) {
@@ -148,7 +149,7 @@ void BYBAccuracyGui::customDraw(){
                         }
                     }
                 }else{
-                    fullText[1] = text[0] + ofToString(fingerNames[currentFinger]) + text[1];
+                    fullText[1] += "\n"+text[0] + ofToString(fingerNames[currentFinger]) + text[1];
                 }
             }
             
