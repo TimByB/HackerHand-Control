@@ -35,7 +35,13 @@ void BYBGui::setup( string language){
 		}
 		if (xml.exists("load")) {
 			loadButton.name = xml.getValue("load");
-		}
+        }
+        if (xml.exists("svm")) {
+            svmButton.name = xml.getValue("svm");
+        }
+        if (xml.exists("euc")) {
+            eucButton.name = xml.getValue("euc");
+        }
         
 	}
 	
@@ -78,6 +84,8 @@ void BYBGui::setup( string language){
 	handImg.scaleTo(guiArea , OF_ASPECT_RATIO_KEEP);
 	
 	handImg.x = logoRect.getMaxX() + (calibrateButton.x - logoRect.getMaxX() - handImg.getWidth())/2.0f;
+    
+    svmButtonPressed();
 	
 }
 //--------------------------------------------------------------
@@ -128,6 +136,9 @@ void BYBGui::setupButtons(){
      calibrateButton.name = "Calibrate";
      accuracyButton.name = "Accuracy Test";
      //*/
+    
+    eucButton.font = &fonts->at ("FiraSans-Heavy");
+    svmButton.font = &fonts->at ("FiraSans-Heavy");
 	loadButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
 	saveButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
 	calibrateButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
@@ -137,11 +148,27 @@ void BYBGui::setupButtons(){
 	saveButton.set(guiArea.getMaxX() -200 - 10, 65 + MARGIN, 200, 40);
 	calibrateButton.set(loadButton.getX() - 200 - 10, 15 + MARGIN, 200, 40);
 	accuracyButton.set(loadButton.getX() - 200 - 10, 65 + MARGIN, 200, 40);
-	
+    eucButton.set(loadButton.getX() - 200 - 10, 115 + MARGIN, 200, 20);
+    svmButton.set(guiArea.getMaxX() -200 - 10, 115 + MARGIN, 200, 20);
+    
 	ofAddListener(loadButton.clickedEvent, this, &BYBGui::loadButtonPressed);
 	ofAddListener(saveButton.clickedEvent, this, &BYBGui::saveButtonPressed);
 	ofAddListener(calibrateButton.clickedEvent, this, &BYBGui::calibrateButtonPressed);
 	ofAddListener(accuracyButton.clickedEvent, this, &BYBGui::accuracyButtonPressed);
+    ofAddListener(eucButton.clickedEvent, this, &BYBGui::eucButtonPressed);
+    ofAddListener(svmButton.clickedEvent, this, &BYBGui::svmButtonPressed);
+}
+//--------------------------------------------------------------
+void BYBGui::eucButtonPressed(){
+    controllerPtr->setClassifier(1);
+    eucButton.setSelected(true);
+    svmButton.setSelected(false);
+}
+//--------------------------------------------------------------
+void BYBGui::svmButtonPressed(){
+    controllerPtr->setClassifier(0);
+    eucButton.setSelected(false);
+    svmButton.setSelected(true);
 }
 //--------------------------------------------------------------
 void BYBGui::slopeThresholdChanged(float & f){
@@ -280,7 +307,7 @@ void BYBGui::draw(){
 	if (getIsCalibrating() || bAccuracyTestRunning) {
 		p = selectedGraph;
 	}else{
-		//p = controllerPtr->classifier.getPrimaryFinger();
+		//p = controllerPtr->getClassifier()->getPrimaryFinger();
         p = selectedFinger;
 		handImg.selectFinger(selectedFinger);
 	}
@@ -301,6 +328,8 @@ void BYBGui::draw(){
 	saveButton.draw();
 	calibrateButton.draw();
 	accuracyButton.draw();
+    eucButton.draw();
+    svmButton.draw();
 	if (!getIsCalibrating()){
 		handImg.draw(ofColor::orange);
 	}
@@ -346,8 +375,11 @@ void BYBGui::selectGraph(int i){
 //--------------------------------------------------------------
 bool BYBGui::getIsCalibrating(){
 	if (controllerPtr) {
-		return controllerPtr->classifier.isCalibrating();
-	}else return false;
+        if (controllerPtr->getClassifier()) {
+            return controllerPtr->getClassifier()->isCalibrating();
+        }
+	}
+    return false;
 }
 //--------------------------------------------------------------
 void BYBGui::peakParamsChanged(float & f){
@@ -431,25 +463,27 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
 			}
 			break;
 		case 'a':
-			//			addFinger();
+			//addFinger();
 			break;
 		case 's':
-			controllerPtr->saveFingerProfile();
+            //controllerPtr->saveFingerProfile();
 			break;
 		case 'n':
-			//			addFinger(true);
+			//addFinger(true);
 			break;
 		case 'w':
-			controllerPtr->serial.saveData();
+            //controllerPtr->serial.saveData();
 			break;
         case 'g':
             bDrawGui ^= true;
             break;
 		case 'l':
-			controllerPtr->serial.loadOfflineData();
+            //controllerPtr->serial.loadOfflineData();
 			break;
 		case 'S':
-			controllerPtr->classifier.save("fingers");
+            if (controllerPtr->getClassifier()) {
+                controllerPtr->getClassifier()->save("fingers");
+            }
 			break;
 		case '1':
 		case '2':

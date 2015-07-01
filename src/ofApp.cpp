@@ -4,6 +4,7 @@
 #include "loPass.h"
 //--------------------------------------------------------------
 void ofApp::setup(){
+    currentClassifier = NULL;
 	ofSetVerticalSync(true);
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	ofXml xml;
@@ -15,8 +16,9 @@ void ofApp::setup(){
 	}
 
 	gui->setup(lang);
-	classifier.setup(lang, gui);
-	originalData.resize(NUM_GRAPHS);
+	classifierSVM.setup(lang, gui);
+	classifierEuc.setup(lang, gui);
+    originalData.resize(NUM_GRAPHS);
     loPassData.resize(NUM_GRAPHS);
 	for (int i = 0; i < NUM_GRAPHS; i++) {
 		originalData[i].resize(ofGetWidth());
@@ -25,12 +27,45 @@ void ofApp::setup(){
 	serial.setup();
 	
 	ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
-    ofAddListener(classifier.fingerMoved, &serial, &serialManager::moveFinger);
+    setClassifier(0);
+  /*  ofAddListener(classifier.fingerMoved, &serial, &serialManager::moveFinger);
     ofAddListener(classifier.fingerReleased, &serial, &serialManager::releaseFinger);
     ofAddListener(classifier.fingerMoved, gui.get(), &BYBGui::moveFinger);
     ofAddListener(classifier.fingerReleased, gui.get(), &BYBGui::releaseFinger);
-    
+    //*/
 
+}
+//--------------------------------------------------------------
+void ofApp::setClassifier(int i){
+    BaseFingersClassifier * nextClass = NULL;
+    switch (i) {
+        case 0:
+            nextClass = &classifierSVM;
+            break;
+        case 1:
+            nextClass = &classifierEuc;
+            break;
+    }
+    if (nextClass) {
+    if (currentClassifier) {
+        ofRemoveListener(currentClassifier->fingerMoved, &serial, &serialManager::moveFinger);
+        ofRemoveListener(currentClassifier->fingerReleased, &serial, &serialManager::releaseFinger);
+        ofRemoveListener(currentClassifier->fingerMoved, gui.get(), &BYBGui::moveFinger);
+        ofRemoveListener(currentClassifier->fingerReleased, gui.get(), &BYBGui::releaseFinger);
+    }
+        if (nextClass != currentClassifier) {
+            nextClass->copyCalibratioFrom(currentClassifier);
+            currentClassifier = nextClass;
+            ofAddListener(currentClassifier->fingerMoved, &serial, &serialManager::moveFinger);
+            ofAddListener(currentClassifier->fingerReleased, &serial, &serialManager::releaseFinger);
+            ofAddListener(currentClassifier->fingerMoved, gui.get(), &BYBGui::moveFinger);
+            ofAddListener(currentClassifier->fingerReleased, gui.get(), &BYBGui::releaseFinger);
+        }
+    }
+}
+//--------------------------------------------------------------
+BaseFingersClassifier* ofApp::getClassifier(){
+    return currentClassifier;
 }
 //--------------------------------------------------------------
 void ofApp::newSerialData(vector<unsigned int> & d){
@@ -44,14 +79,18 @@ void ofApp::newSerialData(vector<unsigned int> & d){
         loPassData[i].back() = loPass(originalData[i], gui->lopassSize);
         lp[i] = loPassData[i].back();
 	}
-	classifier.update(loPassData, lp, gui->update(lp), gui->peakDetSize  ,gui->getLastPeak());
+    if (currentClassifier) {
+        currentClassifier->update(loPassData, lp, gui->update(lp), gui->peakDetSize  ,gui->getLastPeak());
+    }
 //    if(gui->update(lp)){//if has peaks
 //		classifier.updatePeak(gui->getLastPeak());
 //	}
 }
 //--------------------------------------------------------------
 void ofApp::startCalibration(){
-	classifier.startCalibration();
+    if (currentClassifier) {
+        currentClassifier->startCalibration();
+    }
 }
 //--------------------------------------------------------------
 void ofApp::update(){
@@ -66,7 +105,9 @@ void ofApp::draw(){
 void ofApp::saveFingerProfile(){
 	ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"), true);
 	if (res.bSuccess) {
-		classifier.save(res.getPath());
+        if (currentClassifier) {
+            currentClassifier->save(res.getPath());
+        }
 	}
 }
 //--------------------------------------------------------------
@@ -75,7 +116,9 @@ void ofApp::loadFingerProfile(){
 	if (res.bSuccess) {
 		ofFile f(res.getPath());
 		if (f.isDirectory()) {
-			classifier.load(res.getPath());
+            if (currentClassifier) {
+                currentClassifier->load(res.getPath());
+            }
 		}
 	}
 }

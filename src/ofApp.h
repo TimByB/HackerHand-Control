@@ -1,12 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-//#define USE_SVM
-#ifdef USE_SVM
 #include "FingerClassifierSVM.h"
-#else
 #include "FingersClassifierSimple.h"
-#endif
 #include "serialManager.h"
 
 class BYBGui;
@@ -28,15 +24,22 @@ public:
 	vector<vector<float> > loPassData;
 	void newSerialData(vector<unsigned int> & d);
 	
-#ifdef USE_SVM
-    FingersClassifierSVM classifier;
-#else
-	FingersClassifierSimple classifier;
-#endif
 	
 	serialManager serial;
 
 	shared_ptr<BYBGui> gui;
-	
+    
+    
+    BaseFingersClassifier* getClassifier();
+
+    void setClassifier(int i);
+    
+protected:
+    
+    BaseFingersClassifier * currentClassifier;
+    
+    FingersClassifierSVM classifierSVM;
+    FingersClassifierSimple classifierEuc;
+    
 };
 

@@ -34,13 +34,15 @@ public:
 	
 	void draw();
 	ofRectangle guiArea, logoRect;
-	button loadButton, saveButton, calibrateButton, accuracyButton;
+	button loadButton, saveButton, calibrateButton, accuracyButton, eucButton, svmButton;
 
 	void loadButtonPressed();
 	void saveButtonPressed();
 	void calibrateButtonPressed();
 	void accuracyButtonPressed();
-
+    void svmButtonPressed();
+    void eucButtonPressed();
+    
 	void loPassChangedI(int & i);
 	void loPassChangedF(float & f);
 	void useLoPassChanged(bool & b);

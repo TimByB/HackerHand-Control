@@ -10,7 +10,7 @@
 
 class button: public ofRectangle{
 public:
-	button():name(""), font(NULL), bIsOver(false),bIsPressed(false), bgColor(70), nameColor(10), hlColor(ofColor::yellow){
+    button():name(""), font(NULL), bIsOver(false),bIsPressed(false),bSelected(false), bgColor(70), nameColor(10), hlColor(ofColor::yellow),selColor(ofColor::cyan){
 		ofRegisterMouseEvents(this, OF_EVENT_ORDER_APP-2);
 	}
 	~button(){
@@ -23,7 +23,9 @@ public:
 		ofPushStyle();
 		if (bIsPressed) {
 			ofSetColor(hlColor);
-		}else{
+        }else if(bSelected){
+            ofSetColor(selColor);
+        }else{
 			ofSetColor(bgColor);
 		}
 		ofDrawRectangle(*this);
@@ -72,13 +74,17 @@ public:
 		bIsOver = bIsPressed = false;
 		return false;
 	}
+    void setSelected(bool s){
+        bSelected = s;
+    }
+    bool getIsSelected(){return bSelected;}
 	void mouseScrolled(ofMouseEventArgs & args){}
     void mouseEntered(ofMouseEventArgs & args){}
 	void mouseExited(ofMouseEventArgs & args){}
     ofEvent<void> clickedEvent;
 	string name;
-	ofColor bgColor, nameColor, hlColor;
+	ofColor bgColor, nameColor, hlColor, selColor;
 	ofTrueTypeFont * font;
-	bool bIsOver, bIsPressed;
+	bool bIsOver, bIsPressed, bSelected;
 	
 };
