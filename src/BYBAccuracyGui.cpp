@@ -63,22 +63,22 @@ void BYBAccuracyGui::manualPressed(){
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::exportPressed(){
-    ofFileDialogResult r = ofSystemSaveDialog("AccuracyTest.txt", "Save your accuracy test as a .txt file");
+    ofFileDialogResult r = ofSystemSaveDialog("AccuracyTest.csv", "Save your accuracy test as a .csv file");
     if (r.bSuccess) {
-        string s = "Total number of tests;" + ofToString(testNum) + "\n";
+        string s = "Total number of tests," + ofToString(testNum) + "\n";
         float percent = 0;
-        if (correctAnswers != 0) {
-            percent = 100*testNum/(float)correctAnswers;
+        if ( testNum != 0) {
+            percent = 100*(float)correctAnswers/testNum;
         }
-        s+= "Global Accuracy;" + ofToString(percent) + "\n";
+        s+= "Global Accuracy," + ofToString(percent) + "\n";
         for (int i = 0; i< 5; i++) {
             s+= "Finger "+ fingerNames[i] + "\n";
-            s+= "Number of Tests; " + ofToString(testNumPerFinger[i]) + "\n";
+            s+= "Number of Tests, " + ofToString(testNumPerFinger[i]) + "\n";
             float p = 0;
-            if (correctPerFinger[i] != 0) {
-                p = 100*testNumPerFinger[i]/(float)correctPerFinger[i];
+            if (testNumPerFinger[i] != 0) {
+                p = 100*(float)correctPerFinger[i]/testNumPerFinger[i];
             }
-            s+= "Accuracy; " + ofToString(p) + "%\n";
+            s+= "Accuracy, " + ofToString(p) + "%\n";
         }
         ofBuffer b(s);
         ofBufferToFile(r.getPath(), b);
@@ -161,8 +161,8 @@ void BYBAccuracyGui::customDraw(){
             ofTrueTypeFont& fr = fonts->at("FiraSans-Regular");
             
             float percent = 0;
-            if (correctAnswers != 0) {
-                percent = 100*testNum/(float)correctAnswers;
+            if (testNum != 0) {
+                percent = 100*(float)correctAnswers/testNum;
             }
             fullText[0] = text[4] + ofToString(percent, 2) + text[5];
             if (bIsRandom) {
