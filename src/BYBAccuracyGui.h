@@ -23,6 +23,7 @@ public:
     virtual void enable(bool e = true);
     void randomPressed();
     void manualPressed();
+    void exportPressed();
     void moveFinger(int f);
     void releaseFinger(int f);
 	vector<string> text;
@@ -33,5 +34,6 @@ public:
 
 	int testNum, totalTests, correctAnswers, currentFinger;
     
-    
+    int testNumPerFinger [5];
+    int correctPerFinger [5];
 };

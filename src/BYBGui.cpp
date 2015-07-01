@@ -85,7 +85,8 @@ void BYBGui::setup( string language){
 	
 	handImg.x = logoRect.getMaxX() + (calibrateButton.x - logoRect.getMaxX() - handImg.getWidth())/2.0f;
     
-    svmButtonPressed();
+ //   svmButtonPressed();
+    svmButton.setSelected(true);
 	
 }
 //--------------------------------------------------------------

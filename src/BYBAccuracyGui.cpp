@@ -13,17 +13,22 @@
 void BYBAccuracyGui::setPtr(BYBGui * p){guiPtr = p;}
 void BYBAccuracyGui::setup(string lang){
     setLanguage(lang);
-    buttons.resize(3);
+    buttons.resize(4);
     cout << "BYBAccuracyGui::setup("<< endl;
+    float buttonWidth = 150;
+    float margin = (getHeight() - 120)/4.0f;
     buttons[1].name = "Random";
     buttons[1].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-    buttons[1].set(getMaxX() -155, buttons[0].getMaxY() + 10 , 150, 50);
+    buttons[1].set(buttons[0].getX() -buttonWidth -10, getY() + margin , buttonWidth, 50);
     
     buttons[2].name = "Manual";
     buttons[2].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-    buttons[2].set(getMaxX() -155, buttons[1].getMaxY() + 10 , 150, 50);
-    testNum = 0;
-    correctAnswers = 1;
+    buttons[2].set(buttons[0].getX() -buttonWidth -10, buttons[1].getMaxY() + margin , buttonWidth, 50);
+    
+    buttons[3].name = "Export";
+    buttons[3].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
+    buttons[3].set(buttons[0].getX() -buttonWidth -10, buttons[2].getMaxY() + margin , buttonWidth, 20);
+    resetTest();
     totalTests = 100;
 }
 //--------------------------------------------------------------
@@ -33,16 +38,18 @@ void BYBAccuracyGui::enable(bool e){
             if (buttons.size()>2) {
                 ofAddListener(buttons[1].clickedEvent, this, &BYBAccuracyGui::randomPressed);
                 ofAddListener(buttons[2].clickedEvent, this, &BYBAccuracyGui::manualPressed);
+                ofAddListener(buttons[3].clickedEvent, this, &BYBAccuracyGui::exportPressed);
             }
         }else{
             if (buttons.size()>2) {
                 ofRemoveListener(buttons[1].clickedEvent, this, &BYBAccuracyGui::randomPressed);
                 ofRemoveListener(buttons[2].clickedEvent, this, &BYBAccuracyGui::manualPressed);
+                ofRemoveListener(buttons[3].clickedEvent, this, &BYBAccuracyGui::exportPressed);
             }
         }
     }
     BYBOverlayGui::enable(e);
-  //  bIsEnabled = e;
+    //  bIsEnabled = e;
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::randomPressed(){
@@ -55,24 +62,56 @@ void BYBAccuracyGui::manualPressed(){
     startTest();
 }
 //--------------------------------------------------------------
+void BYBAccuracyGui::exportPressed(){
+    ofFileDialogResult r = ofSystemSaveDialog("AccuracyTest.txt", "Save your accuracy test as a .txt file");
+    if (r.bSuccess) {
+        string s = "Total number of tests;" + ofToString(testNum) + "\n";
+        float percent = 0;
+        if (correctAnswers != 0) {
+            percent = 100*testNum/(float)correctAnswers;
+        }
+        s+= "Global Accuracy;" + ofToString(percent) + "\n";
+        for (int i = 0; i< 5; i++) {
+            s+= "Finger "+ fingerNames[i] + "\n";
+            s+= "Number of Tests; " + ofToString(testNumPerFinger[i]) + "\n";
+            float p = 0;
+            if (correctPerFinger[i] != 0) {
+                p = 100*testNumPerFinger[i]/(float)correctPerFinger[i];
+            }
+            s+= "Accuracy; " + ofToString(p) + "%\n";
+        }
+        ofBuffer b(s);
+        ofBufferToFile(r.getPath(), b);
+    }
+}
+//--------------------------------------------------------------
 void BYBAccuracyGui::resetTest(){
     testNum = 0;
     correctAnswers = 0;
     currentFinger = 0;
+    memset(testNumPerFinger, 0, sizeof(int)*5);
+    memset(correctPerFinger, 0, sizeof(int)*5);
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::moveFinger(int f){
     testNum++;
+    testNumPerFinger[currentFinger]++;
     if (currentFinger == f) {
         correctAnswers++;
+        correctPerFinger[f]++;
     }
+    
     if (bIsRandom) {
         currentFinger = (int)floor(ofRandom(5));
+        if (currentFinger >4) {
+            currentFinger = 4;
+        }
     }
+    
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::releaseFinger(int f){
-
+    
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::setLanguage(string lang){
@@ -114,7 +153,7 @@ void BYBAccuracyGui::endTest(){
 
 void BYBAccuracyGui::customDraw(){
     
-  //  cout << "BYBAccuracyGui::customDraw() fonts: "+ ofToString((bool)fonts) << endl;
+    //  cout << "BYBAccuracyGui::customDraw() fonts: "+ ofToString((bool)fonts) << endl;
     //*
     if (fonts != NULL ) {
         if(fonts->count("FiraSans-Heavy") > 0 && fonts->count("FiraSans-Regular") > 0){
@@ -123,7 +162,7 @@ void BYBAccuracyGui::customDraw(){
             
             float percent = 0;
             if (correctAnswers != 0) {
-                percent = testNum/(float)correctAnswers;
+                percent = 100*testNum/(float)correctAnswers;
             }
             fullText[0] = text[4] + ofToString(percent, 2) + text[5];
             if (bIsRandom) {
@@ -175,5 +214,4 @@ void BYBAccuracyGui::customDraw(){
             }
         }
     }
-    //*/
 }

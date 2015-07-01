@@ -10,6 +10,10 @@ class BYBGui;
 
 
 int main( ){
+    string newRoot = "../Resources/data/";
+    ofEnableDataPath();
+    ofSetDataPathRoot(newRoot);
+
 //	ofAppGlutWindow window;
 	//ofSetupOpenGL(&window, 1024,768,OF_WINDOW);			// <-------- setup the GL context
 	ofSetupOpenGL(1024,768,OF_WINDOW);
