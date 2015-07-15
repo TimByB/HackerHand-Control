@@ -107,7 +107,8 @@ void ofApp::draw(){
 }
 //--------------------------------------------------------------
 void ofApp::saveFingerProfile(){
-    ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"), true);
+//    ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"), true);
+    ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"));  
     if (res.bSuccess) {
         if (currentClassifier) {
             currentClassifier->save(res.getPath());

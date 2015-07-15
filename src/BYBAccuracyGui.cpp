@@ -35,6 +35,7 @@ void BYBAccuracyGui::setup(string lang){
 void BYBAccuracyGui::enable(bool e){
     if (bIsEnabled != e) {
         if (e) {
+            resetTest();
             if (buttons.size()>2) {
                 ofAddListener(buttons[1].clickedEvent, this, &BYBAccuracyGui::randomPressed);
                 ofAddListener(buttons[2].clickedEvent, this, &BYBAccuracyGui::manualPressed);
@@ -71,9 +72,11 @@ void BYBAccuracyGui::exportPressed(){
             percent = 100*(float)correctAnswers/testNum;
         }
         s+= "Global Accuracy," + ofToString(percent) + "\n";
+        s+= "False Negatives" + ofToString(falseNegatives) + "\n";
         for (int i = 0; i< 5; i++) {
             s+= "Finger "+ fingerNames[i] + "\n";
             s+= "Number of Tests, " + ofToString(testNumPerFinger[i]) + "\n";
+            s+= "Number of False Negatives, " + ofToString(falseNegativePerFinger[i]) + "\n";
             float p = 0;
             if (testNumPerFinger[i] != 0) {
                 p = 100*(float)correctPerFinger[i]/testNumPerFinger[i];
@@ -89,8 +92,11 @@ void BYBAccuracyGui::resetTest(){
     testNum = 0;
     correctAnswers = 0;
     currentFinger = 0;
+    prevFinger = 0;
+    falseNegatives = 0;
     memset(testNumPerFinger, 0, sizeof(int)*5);
     memset(correctPerFinger, 0, sizeof(int)*5);
+    memset(falseNegativePerFinger, 0, sizeof(int)*5);
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::moveFinger(int f){
@@ -100,7 +106,7 @@ void BYBAccuracyGui::moveFinger(int f){
         correctAnswers++;
         correctPerFinger[f]++;
     }
-    
+    prevFinger = currentFinger;
     if (bIsRandom) {
         currentFinger = (int)floor(ofRandom(5));
         if (currentFinger >4) {
@@ -150,7 +156,23 @@ void BYBAccuracyGui::startTest(){
 void BYBAccuracyGui::endTest(){
     bTestStarted = false;
 }
-
+bool BYBAccuracyGui::keyReleased(ofKeyEventArgs& args){
+    if(BYBOverlayGui::keyReleased(args)){
+        return true;
+    }else{
+        if (args.key == ' ') {
+            addFalseNegative();
+            return true;
+        }
+    }
+    return false;
+}
+void BYBAccuracyGui::addFalseNegative(){
+    testNum++;
+    testNumPerFinger[prevFinger]++;
+    falseNegatives++;
+    
+}
 void BYBAccuracyGui::customDraw(){
     
     //  cout << "BYBAccuracyGui::customDraw() fonts: "+ ofToString((bool)fonts) << endl;
@@ -190,6 +212,7 @@ void BYBAccuracyGui::customDraw(){
                 }else{
                     fullText[1] += "\n"+text[0] + ofToString(fingerNames[currentFinger]) + text[1];
                 }
+                fullText[1] += "\n"+text.back();
             }
             
             ofRectangle rh = fh.getStringBoundingBox(fullText[0], 0, 0);//gap);
@@ -202,9 +225,13 @@ void BYBAccuracyGui::customDraw(){
             
             //rh.y = gap + y - rh.y;
             //rr.y = gap + rh.getMaxY()+y - rr.y;
+            if (rh.height + rr.height > height ) {
+                fh.drawString(fullText[0], rh.x, -rh.y +10);
+                fr.drawString(fullText[1], rr.x, height - rr.height -rr.y);
+            }else{
             fh.drawString(fullText[0], rh.x, gap - rh.y + y);
             fr.drawString(fullText[1], rr.x, 2*gap -rr.y + y + rh.height);
-            
+            }
             if (guiPtr){// && bIsRandom) {
                 ofRectangle r = (ofRectangle) guiPtr->handImg;
                 r.scaleTo(*this);

@@ -10,10 +10,11 @@ class BYBGui;
 
 
 int main( ){
+#ifdef TARGET_OSX
     string newRoot = "../Resources/data/";
     ofEnableDataPath();
     ofSetDataPathRoot(newRoot);
-
+#endif
 //	ofAppGlutWindow window;
 	//ofSetupOpenGL(&window, 1024,768,OF_WINDOW);			// <-------- setup the GL context
 	ofSetupOpenGL(1024,768,OF_WINDOW);

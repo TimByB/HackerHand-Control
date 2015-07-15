@@ -26,14 +26,17 @@ public:
     void exportPressed();
     void moveFinger(int f);
     void releaseFinger(int f);
+    	virtual bool keyReleased(ofKeyEventArgs& args);
+    void addFalseNegative();
 	vector<string> text;
 	string fullText [2];
 	map<int, string> fingerNames;
 		BYBGui* guiPtr;
     bool bIsRandom, bTestStarted;
 
-	int testNum, totalTests, correctAnswers, currentFinger;
+	int testNum, totalTests, correctAnswers, currentFinger, falseNegatives, prevFinger;
     
     int testNumPerFinger [5];
     int correctPerFinger [5];
+    int falseNegativePerFinger [5];
 };
