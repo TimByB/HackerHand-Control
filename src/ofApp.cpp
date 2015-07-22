@@ -29,7 +29,8 @@ void ofApp::setup(){
     
     ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
     setClassifier(0);
-    /*  ofAddListener(classifier.fingerMoved, &serial, &serialManager::moveFinger);
+    /*
+    ofAddListener(classifier.fingerMoved, &serial, &serialManager::moveFinger);
      ofAddListener(classifier.fingerReleased, &serial, &serialManager::releaseFinger);
      ofAddListener(classifier.fingerMoved, gui.get(), &BYBGui::moveFinger);
      ofAddListener(classifier.fingerReleased, gui.get(), &BYBGui::releaseFinger);

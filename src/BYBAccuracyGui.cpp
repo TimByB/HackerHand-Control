@@ -170,6 +170,7 @@ bool BYBAccuracyGui::keyReleased(ofKeyEventArgs& args){
 void BYBAccuracyGui::addFalseNegative(){
     testNum++;
     testNumPerFinger[prevFinger]++;
+    falseNegativePerFinger[prevFinger]++;
     falseNegatives++;
     
 }

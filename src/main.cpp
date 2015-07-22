@@ -49,7 +49,11 @@ int main( ){
 	shared_ptr<BYBGui> gui (new BYBGui);
 	mainApp->gui = gui;
 	gui->controllerPtr = mainApp;
-	gui->fonts = fonts;	
+	gui->fonts = fonts;
+    try{
 	ofRunApp(mainApp);
-
+    }catch(exception& e){cout << e.what() << '\n';}
+    catch (int param) { cout << "int exception"; }
+    catch (char param) { cout << "char exception"; }
+    catch (...) { cout << "default exception"; }
 }

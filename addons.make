@@ -1,0 +1,5 @@
+ofxGui
+ofxModifierKeys
+ofxLearn
+ofxScaleDragRect
+ofxXmlSettings

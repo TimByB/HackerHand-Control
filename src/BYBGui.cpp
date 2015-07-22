@@ -468,7 +468,8 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
 			break;
 		case 's':
             //controllerPtr->saveFingerProfile();
-			break;
+            controllerPtr->serial.saveData();
+            break;
 		case 'n':
 			//addFinger(true);
 			break;
@@ -479,7 +480,7 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
             bDrawGui ^= true;
             break;
 		case 'l':
-            //controllerPtr->serial.loadOfflineData();
+            controllerPtr->serial.loadOfflineData();
 			break;
 		case 'S':
             if (controllerPtr->getClassifier()) {
