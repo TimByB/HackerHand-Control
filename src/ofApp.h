@@ -34,6 +34,11 @@ public:
 
     void setClassifier(int i);
     
+#ifdef DEBUG_CLASSIFIERS
+    void gotClassifyEvent();
+    bool bIsClassifying;
+#endif
+    
 protected:
     
     BaseFingersClassifier * currentClassifier;
