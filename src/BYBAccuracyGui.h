@@ -26,6 +26,7 @@ public:
     void exportPressed();
     void moveFinger(int f);
     void releaseFinger(int f);
+    void randomFinger();
     	virtual bool keyReleased(ofKeyEventArgs& args);
     void addFalseNegative();
 	vector<string> text;

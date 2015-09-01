@@ -48,7 +48,7 @@ void BYBGui::setup( string language){
 	graphs.resize(NUM_GRAPHS);
 	for (int i = 0; i < NUM_GRAPHS; i++) {
 		graphs[i].setup(ofGetWidth()-5, (string)((fingerNames.count(i)>0)?fingerNames[i]:""));
-		graphs[i].setFont(fonts.get());
+		graphs[i].setFont(fonts);
 		graphs[i].setNormalize(true);
 		
 	}
@@ -69,7 +69,23 @@ void BYBGui::setup( string language){
 	
 	calibrationGui.setPtr(this);
     accuracyGui.setPtr(this);
-	accuracyGui.set(MARGIN, MARGIN, ofGetWidth() - (2*MARGIN), guiArea.height);
+    /*
+    for(map<string,ofTrueTypeFont>::iterator it=fonts.begin(); it!=fonts.end(); ++it){
+        calibrationGui.fonts.clear();
+        
+        accuracyGui.fonts.clear();
+        
+        accuracyGui.fonts[it->first] = it->second;
+                calibrationGui.fonts[it->first] = it->second;
+    }
+//*/
+    calibrationGui.fonts = fonts;
+    
+    accuracyGui.fonts = fonts;
+    calibrationGui.setButtons();
+    accuracyGui.setButtons();
+    
+    accuracyGui.set(MARGIN, MARGIN, ofGetWidth() - (2*MARGIN), guiArea.height);
     accuracyGui.setup(language);
 	calibrationGui.setLanguage(language);
 
@@ -93,7 +109,7 @@ void BYBGui::setup( string language){
 void BYBGui::setupParameters(){
 	gui.setup();
 	gui.setPosition(300, MARGIN);
-	gui.setWidthElements(200);
+//	gui.setWidthElements(200);
 	gui.add(lopassSize.set("loPass Size", 5, 1, 30));
 	gui.add(bUseLoPass.set("Use Lo Pass", false));
 	gui.add(loPassFactor.set("loPass Factor", 0.3, 0, 1));
@@ -137,14 +153,22 @@ void BYBGui::setupButtons(){
      calibrateButton.name = "Calibrate";
      accuracyButton.name = "Accuracy Test";
      //*/
-    
+#ifdef USE_SHARED_FONTS
     eucButton.font = &fonts->at ("FiraSans-Heavy");
     svmButton.font = &fonts->at ("FiraSans-Heavy");
-	loadButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-	saveButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-	calibrateButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-	accuracyButton.font = &fonts->at ("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-	
+	loadButton.font = &fonts->at ("FiraSans-Heavy");
+	saveButton.font = &fonts->at ("FiraSans-Heavy");
+	calibrateButton.font = &fonts->at ("FiraSans-Heavy");
+	accuracyButton.font = &fonts->at ("FiraSans-Heavy");
+#else
+    eucButton.font = fonts["FiraSans-Heavy"];
+    svmButton.font = fonts["FiraSans-Heavy"];
+    loadButton.font = fonts["FiraSans-Heavy"];
+    saveButton.font = fonts["FiraSans-Heavy"];
+    calibrateButton.font = fonts["FiraSans-Heavy"];
+    accuracyButton.font = fonts["FiraSans-Heavy"];
+
+#endif
 	loadButton.set(guiArea.getMaxX() -200 - 10, 15 + MARGIN, 200, 40);
 	saveButton.set(guiArea.getMaxX() -200 - 10, 65 + MARGIN, 200, 40);
 	calibrateButton.set(loadButton.getX() - 200 - 10, 15 + MARGIN, 200, 40);

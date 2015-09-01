@@ -7,17 +7,29 @@
 //
 
 #include "BYBOverlayGui.h"
+#ifdef USE_SHARED_FONTS
 shared_ptr<map<string,ofTrueTypeFont> > BYBOverlayGui::fonts =  shared_ptr<map<string,ofTrueTypeFont> >();
+#endif
 //--------------------------------------------------------------
 BYBOverlayGui::BYBOverlayGui():bIsEnabled(false),opacity(255){
-	setButtons();
+#ifdef USE_SHARED_FONTS
+    setButtons();
+#endif
+}
+BYBOverlayGui::~BYBOverlayGui(){
+    fonts.clear();
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::setButtons(){
     cout << " BYBOverlayGui::setButtons" << endl;
 	buttons.resize(1);
 	buttons[0].name = "X";
+    
+#ifdef USE_SHARED_FONTS
 	buttons[0].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
+#else
+    buttons[0].font = fonts["FiraSans-Heavy"];
+#endif
     arrangeButtons();
 }
 //--------------------------------------------------------------

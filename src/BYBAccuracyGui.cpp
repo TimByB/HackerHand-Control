@@ -17,17 +17,23 @@ void BYBAccuracyGui::setup(string lang){
     cout << "BYBAccuracyGui::setup("<< endl;
     float buttonWidth = 150;
     float margin = (getHeight() - 120)/4.0f;
-    buttons[1].name = "Random";
+#ifdef USE_SHARED_FONTS
     buttons[1].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-    buttons[1].set(buttons[0].getX() -buttonWidth -10, getY() + margin , buttonWidth, 50);
-    
-    buttons[2].name = "Manual";
     buttons[2].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
-    buttons[2].set(buttons[0].getX() -buttonWidth -10, buttons[1].getMaxY() + margin , buttonWidth, 50);
-    
-    buttons[3].name = "Export";
     buttons[3].font = &fonts->at("FiraSans-Heavy");//["HelveticaNeueLTStd-Md"];
+#else
+    buttons[1].font = fonts["FiraSans-Heavy"];
+    buttons[2].font = fonts["FiraSans-Heavy"];
+    buttons[3].font = fonts["FiraSans-Heavy"];
+#endif
+    buttons[1].set(buttons[0].getX() -buttonWidth -10, getY() + margin , buttonWidth, 50);
+    buttons[2].set(buttons[0].getX() -buttonWidth -10, buttons[1].getMaxY() + margin , buttonWidth, 50);
     buttons[3].set(buttons[0].getX() -buttonWidth -10, buttons[2].getMaxY() + margin , buttonWidth, 20);
+
+    buttons[1].name = "Random";
+    buttons[2].name = "Manual";
+    buttons[3].name = "Export";
+
     resetTest();
     totalTests = 100;
 }
@@ -107,13 +113,16 @@ void BYBAccuracyGui::moveFinger(int f){
         correctPerFinger[f]++;
     }
     prevFinger = currentFinger;
+    randomFinger();
+}
+//--------------------------------------------------------------
+void BYBAccuracyGui::randomFinger(){
     if (bIsRandom) {
         currentFinger = (int)floor(ofRandom(5));
         if (currentFinger >4) {
             currentFinger = 4;
         }
     }
-    
 }
 //--------------------------------------------------------------
 void BYBAccuracyGui::releaseFinger(int f){
@@ -172,16 +181,23 @@ void BYBAccuracyGui::addFalseNegative(){
     testNumPerFinger[prevFinger]++;
     falseNegativePerFinger[prevFinger]++;
     falseNegatives++;
-    
+    randomFinger();
 }
 void BYBAccuracyGui::customDraw(){
     
     //  cout << "BYBAccuracyGui::customDraw() fonts: "+ ofToString((bool)fonts) << endl;
     //*
+#ifdef USE_SHARED_FONTS
     if (fonts != NULL ) {
         if(fonts->count("FiraSans-Heavy") > 0 && fonts->count("FiraSans-Regular") > 0){
             ofTrueTypeFont& fh = fonts->at("FiraSans-Heavy");
             ofTrueTypeFont& fr = fonts->at("FiraSans-Regular");
+            
+#else
+        if(fonts.count("FiraSans-Heavy") > 0 && fonts.count("FiraSans-Regular") > 0){
+            ofTrueTypeFont& fh = fonts["FiraSans-Heavy"];
+            ofTrueTypeFont& fr = fonts["FiraSans-Regular"];
+#endif
             
             float percent = 0;
             if (testNum != 0) {
@@ -242,4 +258,6 @@ void BYBAccuracyGui::customDraw(){
             }
         }
     }
+#ifdef USE_SHARED_FONTS
 }
+#endif

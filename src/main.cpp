@@ -1,3 +1,4 @@
+//#define USE_SHARED_FONTS
 #include "ofMain.h"
 class ofApp;
 class BYBGui;
@@ -21,35 +22,37 @@ int main( ){
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN
 	// pass in width and height too:
-	
+#ifdef USE_SHARED_FONTS
 	shared_ptr<map<string,ofTrueTypeFont> > fonts (new map<string,ofTrueTypeFont>);
-	ofDirectory dir;
-	dir.allowExt("ttf");
-	dir.allowExt("otf");
-	dir.listDir("fonts");
-	map<string,ofTrueTypeFont>& fnt = *fonts.get();
-	for (int i = 0; i < dir.size(); i++ ){
-		ofTrueTypeFont f;
-		if(f.load(dir.getPath(i),12, true, true)){
-			fnt[ofFilePath::removeExt(dir.getName(i))] = f;
-			cout << "added Font: " << ofFilePath::removeExt(dir.getName(i)) << endl;
-		}
-		if(f.load(dir.getPath(i),25, true, true)){
-			fnt[ofFilePath::removeExt(dir.getName(i)) + "_25"] = f;
-		}
-
-	}
+#endif
+    //map<string,ofTrueTypeFont> fonts;
+    
 	//	fonts["HelveticaNeueLTStd-Md"].load("fonts/HelveticaNeueLTStd-Md.otf", 15);
 	
-	
+	//BYBOverlayGui::fonts = fonts;
 
-	BYBOverlayGui::fonts = fonts;
-	
 	shared_ptr<ofApp> mainApp (new ofApp);
 	shared_ptr<BYBGui> gui (new BYBGui);
 	mainApp->gui = gui;
 	gui->controllerPtr = mainApp;
-	gui->fonts = fonts;
+    
+    ofDirectory dir;
+    dir.allowExt("ttf");
+    dir.allowExt("otf");
+    dir.listDir("fonts");
+    for (int i = 0; i < dir.size(); i++ ){
+        ofTrueTypeFont f;
+        if(f.load(dir.getPath(i),12, true, true)){
+            gui->fonts[ofFilePath::removeExt(dir.getName(i))] = f;
+            cout << "added Font: " << ofFilePath::removeExt(dir.getName(i)) << endl;
+        }
+        if(f.load(dir.getPath(i),25, true, true)){
+            gui->fonts[ofFilePath::removeExt(dir.getName(i)) + "_25"] = f;
+        }
+    }
+
+
+    
     try{
 	ofRunApp(mainApp);
     }catch(exception& e){cout << e.what() << '\n';}

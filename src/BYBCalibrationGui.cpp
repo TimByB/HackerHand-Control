@@ -5,7 +5,6 @@
 //  Created by Roy Macdonald on 21-05-15.
 //
 //
-#pragma once
 
 #include "BYBCalibrationGui.h"
 
@@ -20,6 +19,7 @@ void BYBCalibrationGui::setPtr(BYBGui * p){
 //----------------------------------------------------------------------
 BYBCalibrationGui::~BYBCalibrationGui(){
 	guiPtr =NULL;
+    BYBOverlayGui::~BYBOverlayGui();
 }
 //----------------------------------------------------------------------
 void BYBCalibrationGui::setLanguage(string lang){
@@ -68,11 +68,18 @@ void BYBCalibrationGui::update(int sampleNum, int currentFinger, int totalSample
 }
 //----------------------------------------------------------------------
 void BYBCalibrationGui::customDraw(){
+
+#ifdef USE_SHARED_FONTS
 	if (fonts) {
-		if(fonts->count("FiraSans-Heavy_25") > 0 && fonts->count("FiraSans-Regular_25") > 0){
+    if(fonts->count("FiraSans-Heavy_25") > 0 && fonts->count("FiraSans-Regular_25") > 0){
 			ofTrueTypeFont& fh = fonts->at("FiraSans-Heavy_25");
 			ofTrueTypeFont& fr = fonts->at("FiraSans-Regular_25");
-			
+#else
+        if(fonts.count("FiraSans-Heavy_25") > 0 && fonts.count("FiraSans-Regular_25") > 0){
+            ofTrueTypeFont& fh = fonts["FiraSans-Heavy_25"];
+            ofTrueTypeFont& fr = fonts["FiraSans-Regular_25"];
+            
+#endif
 			ofRectangle rh = fh.getStringBoundingBox(fullText[0], 0, 0);//gap);
 			ofRectangle rr = fr.getStringBoundingBox(fullText[1], 0, 0);//2*gap + fh.getLineHeight());
 			float gap = (this->getHeight() - rh.getHeight() - rr.getHeight())/3.0f;
@@ -94,6 +101,9 @@ void BYBCalibrationGui::customDraw(){
 			}
 		}
 	}
+        
+#ifdef USE_SHARED_FONTS
 }
+#endif
 
 
