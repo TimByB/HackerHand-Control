@@ -64,8 +64,9 @@ public:
 	void drawGraphs();
 	void drawGraph(int i);
 
-	void updatePeakDetection();
-	void updateLoPass();
+	bool updatePeakDetection(bool bRecalculateAll = true);
+    bool searchForPeak(int i, int& k, float& pat, float& pdt);
+    void updateLoPass();
 	ofImage logo;
 
 	vector<graph1D>graphs;
