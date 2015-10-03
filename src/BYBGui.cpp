@@ -79,9 +79,9 @@ void BYBGui::setup( string language){
                 calibrationGui.fonts[it->first] = it->second;
     }
 //*/
-    calibrationGui.fonts = fonts;
+  //  calibrationGui.fonts = fonts;
     
-    accuracyGui.fonts = fonts;
+    //accuracyGui.fonts = fonts;
     calibrationGui.setButtons();
     accuracyGui.setButtons();
     

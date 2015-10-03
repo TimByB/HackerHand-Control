@@ -3,8 +3,6 @@
 #include "BYBGui.h"
 #include "loPass.h"
 
-#define BOOL_TO_STRING(b) (#b": " +(string)((b)?"true":"false"))
-#define TO_STRING(b) (#b": " + ofToString((b)))
 //--------------------------------------------------------------
 void ofApp::setup(){
     
@@ -32,27 +30,8 @@ void ofApp::setup(){
     
     ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
     setClassifier(0);
-    /*
-    ofAddListener(classifier.fingerMoved, &serial, &serialManager::moveFinger);
-     ofAddListener(classifier.fingerReleased, &serial, &serialManager::releaseFinger);
-     ofAddListener(classifier.fingerMoved, gui.get(), &BYBGui::moveFinger);
-     ofAddListener(classifier.fingerReleased, gui.get(), &BYBGui::releaseFinger);
-     //*/
-    
-#ifdef DEBUG_CLASSIFIERS
-    bIsClassifying = false;
-    ofAddListener(classifierSVM.classifyEvent, this, &ofApp::gotClassifyEvent);
-#endif
-
     
 }
-#ifdef DEBUG_CLASSIFIERS
-//--------------------------------------------------------------
-void ofApp::gotClassifyEvent(){
-    bIsClassifying = true;
-}
-#endif
-
 //--------------------------------------------------------------
 void ofApp::setClassifier(int i){
     BaseFingersClassifier * nextClass = NULL;
@@ -103,9 +82,6 @@ void ofApp::newSerialData(vector<unsigned int> & d){
     if (currentClassifier) {
         currentClassifier->update(loPassData, lp, gui->update(lp), gui->peakDetSize  ,gui->getLastPeak());
     }
-    //    if(gui->update(lp)){//if has peaks
-    //		classifier.updatePeak(gui->getLastPeak());
-    //	}
 }
 //--------------------------------------------------------------
 void ofApp::startCalibration(){
@@ -121,28 +97,6 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(0);
     gui->draw();
-    
-#ifdef DEBUG_CLASSIFIERS
-    if (bIsClassifying) {
-        ofPushStyle();
-        ofSetColor(ofColor::red);
-        ofDrawCircle(100, 100, 50);
-        ofPopStyle();
-        bIsClassifying = false;
-    }
-    string str = "";
-    
-    str += BOOL_TO_STRING(classifierSVM.bCalibrating)+"\n";
-    str += BOOL_TO_STRING(classifierSVM.bWaitForPeak)+"\n";
-    str += BOOL_TO_STRING(classifierSVM.bWaitForAverage)+"\n";
-    str += TO_STRING(classifierSVM.currentSampleNum)+"\n";
-    str += TO_STRING(classifierSVM.numSamplesAverage)+"\n";
-    str += TO_STRING(classifierSVM.maxAll);
-    
-    ofDrawBitmapStringHighlight(str, 50, 600);
-    
-#endif
-    
 }
 //--------------------------------------------------------------
 void ofApp::saveFingerProfile(){

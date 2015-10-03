@@ -23,7 +23,8 @@ public:
     virtual ~BYBOverlayGui();
 	virtual void setButtons();
     virtual void arrangeButtons();
-    void set(float px, float py, float w, float h);
+	void loadFonts();
+	void set(float px, float py, float w, float h);
     void set(const ofPoint& p, float w, float h);
     void set(const ofRectangle& rect);
 	virtual void enable(bool e = true);

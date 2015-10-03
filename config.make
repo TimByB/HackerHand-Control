@@ -37,8 +37,9 @@
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
- PROJECT_EXTERNAL_SOURCE_PATHS = ../SHARED_CODE/ ../SHARED_CODE/FingerClassifier
-
+PROJECT_EXTERNAL_SOURCE_PATHS += $(OF_ROOT)/addons/ofxLearn/libs
+PROJECT_EXTERNAL_SOURCE_PATHS += ../SHARED_CODE
+PROJECT_EXTERNAL_SOURCE_PATHS += ../SHARED_CODE/FingerClassifier
 ################################################################################
 # PROJECT EXCLUSIONS
 #   These makefiles assume that all folders in your current project directory 

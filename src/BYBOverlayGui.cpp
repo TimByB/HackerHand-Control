@@ -15,9 +15,26 @@ BYBOverlayGui::BYBOverlayGui():bIsEnabled(false),opacity(255){
 #ifdef USE_SHARED_FONTS
     setButtons();
 #endif
+	loadFonts();
 }
 BYBOverlayGui::~BYBOverlayGui(){
     fonts.clear();
+}
+//--------------------------------------------------------------
+void BYBOverlayGui::loadFonts() {
+	ofDirectory dir;
+	dir.allowExt("ttf");
+	dir.allowExt("otf");
+	dir.listDir("fonts");
+	for (int i = 0; i < dir.size(); i++) {
+		ofTrueTypeFont f;
+		if (f.load(dir.getPath(i), 12, true, true)) {
+			fonts[ofFilePath::removeExt(dir.getName(i))] = f;
+		}
+		if (f.load(dir.getPath(i), 25, true, true)) {
+			fonts[ofFilePath::removeExt(dir.getName(i)) + "_25"] = f;
+		}
+	}
 }
 //--------------------------------------------------------------
 void BYBOverlayGui::setButtons(){
