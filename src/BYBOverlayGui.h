@@ -13,11 +13,7 @@
 
 class BYBOverlayGui: public ofRectangle{
 public:
-#ifdef USE_SHARED_FONTS
-	static shared_ptr<map<string,ofTrueTypeFont> > fonts;
-#else
-    map<string,ofTrueTypeFont> fonts;    
-#endif
+    map<string,ofTrueTypeFont> fonts;
 
 	BYBOverlayGui();
     virtual ~BYBOverlayGui();

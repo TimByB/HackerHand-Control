@@ -25,11 +25,7 @@ class ofApp;
 
 class BYBGui {
 public:
-#ifdef USE_SHARED_FONTS
-	shared_ptr<map<string,ofTrueTypeFont> > fonts;
-#else
     map<string,ofTrueTypeFont> fonts;
-#endif
 	BYBGui():bDrawGui(false){}
     ~BYBGui(){
         fonts.clear();

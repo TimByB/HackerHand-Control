@@ -11,20 +11,13 @@
 class button: public ofRectangle{
 public:
     button():name(""), bIsOver(false),bIsPressed(false),bSelected(false), bgColor(70), nameColor(10), hlColor(ofColor::yellow),selColor(ofColor::cyan){
-#ifdef USE_SHARED_FONTS
-        font(NULL);
-#endif
         ofRegisterMouseEvents(this, OF_EVENT_ORDER_APP-2);
 	}
 	~button(){
 		ofUnregisterMouseEvents(this, OF_EVENT_ORDER_APP-2);
 	}
 	void setFont(ofTrueTypeFont& f){
-#ifdef USE_SHARED_FONTS
-		font = &f;
-#else
         font = f;
-#endif
 	}
 	void draw(){
 		ofPushStyle();
@@ -46,12 +39,7 @@ public:
 			ofPopStyle();
 		}
 		ofSetColor(nameColor);
-#ifdef USE_SHARED_FONTS
-		if (font) {
-			ofRectangle r = font->getStringBoundingBox(name, 0, 0);
-#else
             ofRectangle r = font.getStringBoundingBox(name, 0, 0);
-#endif
 			ofRectangle r0 = r;
 			r.alignTo(*this);
 			//			ofPushStyle();
@@ -59,12 +47,7 @@ public:
 			//			ofNoFill();
 			//			ofDrawRectangle(r);
 			//			ofPopStyle();
-#ifdef USE_SHARED_FONTS
-            font->drawString(name, r.x, r.y - r0.y);
-		}
-#else
             font.drawString(name, r.x, r.y - r0.y);
-#endif
 		ofPopStyle();
 	}
 	void mouseMoved(ofMouseEventArgs & args){
@@ -99,11 +82,7 @@ public:
     ofEvent<void> clickedEvent;
 	string name;
 	ofColor bgColor, nameColor, hlColor, selColor;
-#ifdef USE_SHARED_FONTS
-	ofTrueTypeFont * font;
-#else
     ofTrueTypeFont font;
-#endif
     
     bool bIsOver, bIsPressed, bSelected;
 	

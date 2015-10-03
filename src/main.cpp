@@ -1,4 +1,4 @@
-//#define USE_SHARED_FONTS
+
 #include "ofMain.h"
 class ofApp;
 class BYBGui;
@@ -22,9 +22,6 @@ int main( ){
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN
 	// pass in width and height too:
-#ifdef USE_SHARED_FONTS
-	shared_ptr<map<string,ofTrueTypeFont> > fonts (new map<string,ofTrueTypeFont>);
-#endif
     //map<string,ofTrueTypeFont> fonts;
     
 	//	fonts["HelveticaNeueLTStd-Md"].load("fonts/HelveticaNeueLTStd-Md.otf", 15);
