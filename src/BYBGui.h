@@ -22,6 +22,7 @@
 
 class ofApp;
 
+#define TEST_PEAK_DET_CLASS
 
 class BYBGui {
 public:
@@ -49,36 +50,49 @@ public:
 	void loPassChangedF(float & f);
 	void useLoPassChanged(bool & b);
 	void slopeThresholdChanged(float & f);
+#ifndef TEST_PEAK_DET_CLASS
 	void peakDetSizeChanged(int & i);
 	void peakParamsChanged(float & f);
-	void opacityChanged(int& i);
+#endif
+    void opacityChanged(int& i);
 	void selectGraph(int i);
-	
-	bool update(vector<float> & v);
-	
+#ifdef TEST_PEAK_DET_CLASS
+    bool update(vector<float> & v, const peakData& p);
+#else
+    bool update(vector<float> & v);
+#endif
 
 	void drawGraphs();
 	void drawGraph(int i);
 
+#ifndef TEST_PEAK_DET_CLASS
 	bool updatePeakDetection(bool bRecalculateAll = true);
     bool searchForPeak(int i, int& k, float& pat, float& pdt);
+#endif
     void updateLoPass();
 	ofImage logo;
 
-	vector<graph1D>graphs;
+	graph1D graphs [NUM_GRAPHS];
+#ifndef TEST_PEAK_DET_CLASS
 	vector<int>peaks[NUM_GRAPHS];
-
+    bool bNewPeak;
+    peakData& getLastPeak();
+    peakData lastPeak;
+#endif
 	
 	void setSizes();
-	
-	bool bNewPeak;
 	
 	bool getIsCalibrating();
 	
 	ofxPanel gui;
-	ofParameter<int> lopassSize, peakDetSize, pinkyPeakDetSize, numSamples, overlayOpacity, releaseTime;
-	ofParameter<bool> bUseLoPass;
-	ofParameter<float> loPassFactor, slopeThreshold, peakAtkThresh, peakDcyThresh, pinkyPeakAtkThresh, pinkyPeakDcyThresh,releaseThreshold;
+
+    ofParameter<int> lopassSize, numSamples, overlayOpacity, releaseTime;
+    ofParameter<bool> bUseLoPass;
+#ifndef TEST_PEAK_DET_CLASS
+    ofParameter<int> peakDetSize, pinkyPeakDetSize;
+    ofParameter<float> peakAtkThresh, peakDcyThresh, pinkyPeakAtkThresh, pinkyPeakDcyThresh,
+#endif
+    ofParameter<float> loPassFactor, slopeThreshold, releaseThreshold;
 
 
 	int getSelectedGraph(){return selectedGraph;}
@@ -102,9 +116,6 @@ public:
 	BYBCalibrationGui calibrationGui;
 	
 	ofEvent<void>startAccuracyTest, startCalibration;
-	
-	peakData& getLastPeak();
-	peakData lastPeak;
 	
 	void updateCalibrationGui(int sampleNum, int currentFinger, int totalSamples, bool bNoFingers = false);
 	bool bDrawGui;

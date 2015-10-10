@@ -19,10 +19,11 @@ public:
 
 	void startCalibration();
 	
-	const vector<vector<float> >& getOriginalData(){return originalData;}
-	vector<vector<float> > originalData;
+	const vector< vector<float> >& getOriginalData(){return originalData;}
+	vector< vector<float> > originalData;
+    vector< shared_ptr<vector<float> > > graphData;
 	vector<vector<float> > loPassData;
-	void newSerialData(vector<unsigned int> & d);
+  	void newSerialData(vector<unsigned int> & d);
 	
 	
 	serialManager serial;

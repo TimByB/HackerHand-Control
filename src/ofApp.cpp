@@ -17,15 +17,23 @@ void ofApp::setup(){
         }else cout << "lang.xml error" << endl;
     }
     
-    gui->setup(lang);
-    classifierSVM.setup(lang, gui);
-    classifierEuc.setup(lang, gui);
+   
+    
     originalData.resize(NUM_GRAPHS);
+    graphData.resize(NUM_GRAPHS);
     loPassData.resize(NUM_GRAPHS);
     for (int i = 0; i < NUM_GRAPHS; i++) {
         originalData[i].resize(ofGetWidth());
         loPassData[i].resize(ofGetWidth());
+#ifdef USE_SHARED_PTR_DATA
+        graphData[i] = shared_ptr<vector<float> >(new vector<float>);
+        graphData[i]->resize(ofGetWidth());
+        gui->graphs[i].data = graphData[i];
+#endif
     }
+    gui->setup(lang);
+    classifierSVM.setup(lang, gui);
+    classifierEuc.setup(lang, gui);
     serial.setup();
     
     ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
@@ -77,10 +85,19 @@ void ofApp::newSerialData(vector<unsigned int> & d){
         originalData[i].back() = d[i];
         memcpy(loPassData[i].data(), loPassData[i].data()+1, (loPassData[i].size()-1)*sizeof(float));
         loPassData[i].back() = loPass(originalData[i], gui->lopassSize);
+#ifdef USE_SHARED_PTR_DATA
+        memcpy(graphData[i]->data(), originalData[i].data(), originalData[i].size()*sizeof(float));
+#endif
         lp[i] = loPassData[i].back();
     }
     if (currentClassifier) {
+#ifndef TEST_PEAK_DET_CLASS
         currentClassifier->update(loPassData, lp, gui->update(lp), gui->peakDetSize  ,gui->getLastPeak());
+#else
+        peakData p;
+        currentClassifier->update(loPassData, lp, gui->update(lp, p), 3  ,p);
+#endif
+
     }
 }
 //--------------------------------------------------------------
