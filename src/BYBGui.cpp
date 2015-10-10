@@ -61,9 +61,7 @@ void BYBGui::setup( string language){
     
     
     selectedGraph = selectedFinger= -1;
-#ifndef TEST_PEAK_DET_CLASS
-    bNewPeak = false;
-#endif
+
     ofRegisterKeyEvents(this);
     ofRegisterMouseEvents(this);
     ofAddListener(ofEvents().windowResized, this, &BYBGui::windowResized);
@@ -92,6 +90,8 @@ void BYBGui::setup( string language){
     handImg.x = logoRect.getMaxX() + (calibrateButton.x - logoRect.getMaxX() - handImg.getWidth())/2.0f;
     
     svmButton.setSelected(true);
+
+    bNewPeak = false;
     
 }
 //--------------------------------------------------------------
@@ -103,15 +103,6 @@ void BYBGui::setupParameters(){
     gui.add(bUseLoPass.set("Use Lo Pass", false));
     gui.add(loPassFactor.set("loPass Factor", 0.3, 0, 1));
     gui.add(slopeThreshold.set("slopeThreshold", 10, 0, 10 ));
-#ifndef TEST_PEAK_DET_CLASS
-    gui.add(peakDetSize.set("peakDetSize", 5, 3, 100));
-    gui.add(peakAtkThresh.set("Peak Attack Threshold", 10, 1, 500));
-    gui.add(peakDcyThresh.set("Peak Decay Threshold", 5, 1, 300));
-    
-    gui.add(pinkyPeakAtkThresh.set("Pinky Peak Attack Threshold", 10, 1, 500));
-    gui.add(pinkyPeakDcyThresh.set("Pinky Peak Decay Threshold", 5, 1, 300));
-    gui.add(pinkyPeakDetSize.set("Pinky PeakDetSize", 5, 3, 100));
-#endif
     gui.add(numSamples.set("Num Samples per finger", 5, 1, 20));
     gui.add(overlayOpacity.set("overlay GUI opacity", 255, 0, 255));
     gui.add(releaseTime.set("Release Time", 500, 1, 2000));
@@ -119,14 +110,6 @@ void BYBGui::setupParameters(){
     
     
     overlayOpacity.addListener(this, &BYBGui::opacityChanged);
- #ifndef TEST_PEAK_DET_CLASS
-    peakAtkThresh.addListener(this, &BYBGui::peakParamsChanged);
-    peakDcyThresh.addListener(this, &BYBGui::peakParamsChanged);
-    peakDetSize.addListener(this, &BYBGui::peakDetSizeChanged);
-    pinkyPeakAtkThresh.addListener(this, &BYBGui::peakParamsChanged);
-    pinkyPeakDcyThresh.addListener(this, &BYBGui::peakParamsChanged);
-    pinkyPeakDetSize.addListener(this, &BYBGui::peakDetSizeChanged);
-#endif
     
     slopeThreshold.addListener(this, &BYBGui::slopeThresholdChanged);
     loPassFactor.addListener(this, &BYBGui::loPassChangedF);
@@ -178,93 +161,18 @@ void BYBGui::slopeThresholdChanged(float & f){
         graphs[i].updateMesh();
     }
 }
-#ifdef TEST_PEAK_DET_CLASS
-bool update(vector<float> & v, const peakData& p){
-#else
 //--------------------------------------------------------------
-bool BYBGui::update(vector<float> & v){
-#endif
-#ifndef TEST_PEAK_DET_CLASS
-    bNewPeak = false;
-#endif
+void BYBGui::update(vector<float> & v, const peakData& p){
+    bNewPeak = p.bPeakFound;
+
     for (int i =0; i < NUM_GRAPHS && i < v.size(); i++) {
         graphs[i].update(v[i]);
-#ifndef TEST_PEAK_DET_CLASS
-        int k = graphs[i].data.size()-peakDetSize;
-   
-        lastPeak.data.push_back(graphs[i].data[k]);//-peakDetSize]);
-#endif
     }
-#ifndef TEST_PEAK_DET_CLASS
-    bNewPeak = updatePeakDetection(false);
-    return bNewPeak;
-#else
-    return false;
-#endif
-
-}
-#ifndef TEST_PEAK_DET_CLASS 
-//--------------------------------------------------------------
-peakData& BYBGui::getLastPeak(){
-    return lastPeak;
-}
-//--------------------------------------------------------------
-bool BYBGui::searchForPeak(int i, int& k, float& pat, float& pdt){
-    bool isMax = true;
-    bool bPeakFound = false;
-    int pds =peakDetSize;
-    for (int j = k-pds; j < k +pds; j++) {
-        if (graphs[i].data[j] > graphs[i].data[k]) {
-            isMax = false;
-        }
+    for (int i = 0; i < p.peakIndices.size(); i++) {
+        graphs[p.peakIndices[i]].addPeak(p.peakDetSize);
     }
-    if (isMax) {
-        if (graphs[i].data[k] - graphs[i].data[k-pds] > pat &&
-            graphs[i].data[k] - graphs[i].data[k+pds] > pdt) {
-            graphs[i].addPeak(k);
-            bPeakFound = true;
-        }
-    }
-    return  bPeakFound;
-}
-//--------------------------------------------------------------
-bool BYBGui::updatePeakDetection(bool bRecalculateAll){
     
-    bool bPeakFound = false;
-    
-    for (int i = 0; i < NUM_GRAPHS; i++) {
-        if(bRecalculateAll){
-            peaks[i].clear();
-            graphs[i].resetPeaks();
-        }
-        int pds =peakDetSize;
-        float pat = peakAtkThresh;
-        float pdt = peakDcyThresh;
-        if(i == 4) {
-            pds = pinkyPeakDetSize;
-            pat = pinkyPeakAtkThresh;
-            pdt = pinkyPeakDcyThresh;
-        }
-        
-        if (bRecalculateAll) {
-            for (int k = pds; k < graphs[i].data.size()-pds; k++) {
-                if (searchForPeak(i, k, pat, pdt)){
-                    peaks[i].push_back(k);
-                    bPeakFound = true;
-                }
-            }
-        }else{
-            lastPeak.clear();
-            int k = graphs[i].data.size()-peakDetSize;
-            if (searchForPeak(i, k, pat , pdt)) {
-                lastPeak.peakIndices.push_back(i);
-                bPeakFound = true;
-            }
-        }
-    }
-    return bPeakFound;
 }
-#endif
 //--------------------------------------------------------------
 void BYBGui::updateLoPass(){
     const vector< vector<float> > & originalData = controllerPtr->getOriginalData();
@@ -352,13 +260,11 @@ void BYBGui::draw(){
     }
     if (p >= 0 && p < NUM_GRAPHS) {
         ofPushStyle();
-#ifndef TEST_PEAK_DET_CLASS
+
         if (bNewPeak) {
             bNewPeak = false;
             ofSetColor(255);
-        }else
-#endif
-            if (getIsCalibrating()) {
+        }else if (getIsCalibrating()) {
             ofSetColor(ofColor::red, ofMap(sin(ofGetElapsedTimef() * TWO_PI), -1, 1, 0, 255));
         }else{
             ofSetColor(ofColor::orange);
@@ -427,16 +333,6 @@ bool BYBGui::getIsCalibrating(){
     }
     return false;
 }
-#ifndef TEST_PEAK_DET_CLASS
-//--------------------------------------------------------------
-void BYBGui::peakParamsChanged(float & f){
-    updatePeakDetection();
-}
-//--------------------------------------------------------------
-void BYBGui::peakDetSizeChanged(int & i){
-    updatePeakDetection();
-}
-#endif
 //--------------------------------------------------------------
 void BYBGui::useLoPassChanged(bool & b){
     updateLoPass();

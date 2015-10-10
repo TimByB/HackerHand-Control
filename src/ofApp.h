@@ -4,6 +4,7 @@
 #include "FingerClassifierSVM.h"
 #include "FingersClassifierSimple.h"
 #include "serialManager.h"
+#include "peakDetector.h"
 
 class BYBGui;
 
@@ -34,6 +35,8 @@ public:
     BaseFingersClassifier* getClassifier();
 
     void setClassifier(int i);
+    
+    peakDetector peakDet;
     
 #ifdef DEBUG_CLASSIFIERS
     void gotClassifyEvent();

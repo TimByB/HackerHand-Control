@@ -6,8 +6,6 @@
 //
 //
 
-#ifndef BYB_HackerHand_Control_BYB_Constants_h
-#define BYB_HackerHand_Control_BYB_Constants_h
+#pragma once
 
-
-#endif
+#define NUM_GRAPHS 5

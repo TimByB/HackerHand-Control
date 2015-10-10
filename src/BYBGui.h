@@ -11,7 +11,7 @@
 #include "graph.h"
 //#include "ofApp.h"
 #include "button.h"
-#define NUM_GRAPHS 5
+#include "BYB_Constants.h"
 #define MARGIN 3
 
 #include "peakData.h"
@@ -50,35 +50,20 @@ public:
 	void loPassChangedF(float & f);
 	void useLoPassChanged(bool & b);
 	void slopeThresholdChanged(float & f);
-#ifndef TEST_PEAK_DET_CLASS
-	void peakDetSizeChanged(int & i);
-	void peakParamsChanged(float & f);
-#endif
+
     void opacityChanged(int& i);
 	void selectGraph(int i);
-#ifdef TEST_PEAK_DET_CLASS
-    bool update(vector<float> & v, const peakData& p);
-#else
-    bool update(vector<float> & v);
-#endif
+
+    void update(vector<float> & v, const peakData& p);
 
 	void drawGraphs();
 	void drawGraph(int i);
 
-#ifndef TEST_PEAK_DET_CLASS
-	bool updatePeakDetection(bool bRecalculateAll = true);
-    bool searchForPeak(int i, int& k, float& pat, float& pdt);
-#endif
+
     void updateLoPass();
 	ofImage logo;
 
 	graph1D graphs [NUM_GRAPHS];
-#ifndef TEST_PEAK_DET_CLASS
-	vector<int>peaks[NUM_GRAPHS];
-    bool bNewPeak;
-    peakData& getLastPeak();
-    peakData lastPeak;
-#endif
 	
 	void setSizes();
 	
@@ -88,10 +73,6 @@ public:
 
     ofParameter<int> lopassSize, numSamples, overlayOpacity, releaseTime;
     ofParameter<bool> bUseLoPass;
-#ifndef TEST_PEAK_DET_CLASS
-    ofParameter<int> peakDetSize, pinkyPeakDetSize;
-    ofParameter<float> peakAtkThresh, peakDcyThresh, pinkyPeakAtkThresh, pinkyPeakDcyThresh,
-#endif
     ofParameter<float> loPassFactor, slopeThreshold, releaseThreshold;
 
 
@@ -127,8 +108,14 @@ public:
     
     bool bAccuracyTestRunning;
     void accuracyTestEnded();
+    
+    
+    
 private:
-		int selectedGraph;
+	
+    bool bNewPeak;
+    
+    int selectedGraph;
     bool movingFinger[5];
 	int selectedFinger;
 };

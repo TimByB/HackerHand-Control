@@ -31,6 +31,7 @@ void ofApp::setup(){
         gui->graphs[i].data = graphData[i];
 #endif
     }
+    gui->gui.add(peakDet.parameters);
     gui->setup(lang);
     classifierSVM.setup(lang, gui);
     classifierEuc.setup(lang, gui);
@@ -39,6 +40,8 @@ void ofApp::setup(){
     ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
     setClassifier(0);
     
+    peakDet.setup();
+
 }
 //--------------------------------------------------------------
 void ofApp::setClassifier(int i){
@@ -86,17 +89,14 @@ void ofApp::newSerialData(vector<unsigned int> & d){
         memcpy(loPassData[i].data(), loPassData[i].data()+1, (loPassData[i].size()-1)*sizeof(float));
         loPassData[i].back() = loPass(originalData[i], gui->lopassSize);
 #ifdef USE_SHARED_PTR_DATA
-        memcpy(graphData[i]->data(), originalData[i].data(), originalData[i].size()*sizeof(float));
+        memcpy(graphData[i]->data(), loPassData[i].data(), loPassData[i].size()*sizeof(float));
 #endif
         lp[i] = loPassData[i].back();
     }
     if (currentClassifier) {
-#ifndef TEST_PEAK_DET_CLASS
-        currentClassifier->update(loPassData, lp, gui->update(lp), gui->peakDetSize  ,gui->getLastPeak());
-#else
-        peakData p;
-        currentClassifier->update(loPassData, lp, gui->update(lp, p), 3  ,p);
-#endif
+        peakData p = peakDet.update(loPassData);
+        gui->update(lp, p);
+        currentClassifier->update(loPassData, lp,p);
 
     }
 }
