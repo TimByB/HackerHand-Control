@@ -38,11 +38,6 @@ public:
     
     peakDetector peakDet;
     
-#ifdef DEBUG_CLASSIFIERS
-    void gotClassifyEvent();
-    bool bIsClassifying;
-#endif
-    
 protected:
     
     BaseFingersClassifier * currentClassifier;

@@ -73,11 +73,7 @@ unsigned int FingersClassifierSVM::classify(const vector<float>& sample) {
            // cout << name << " classify: " << pf << endl;
             
             primaryFinger = pf;
-            
-#ifdef DEBUG_CLASSIFIERS
-            ofNotifyEvent( classifyEvent, this);
-#endif
-            
+                        
             return primaryFinger;
         }
     }

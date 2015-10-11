@@ -13,7 +13,6 @@
 #include "peakData.h"
 #include "BYBGui.h"
 
-//#define DEBUG_CLASSIFIERS
 
 class BaseFingersClassifier {
 public:
@@ -46,11 +45,8 @@ public:
     vector<int> getClassifyHist();
     
     string name;
-#ifdef DEBUG_CLASSIFIERS
-    ofEvent<void>classifyEvent;
-#else
 protected:
-#endif
+
 	vector<Fingers> fingers;
 
 	bool bCalibrating;
