@@ -118,7 +118,7 @@ void mainAppController::draw(){
 //--------------------------------------------------------------
 void mainAppController::saveFingerProfile(){
 //    ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"), true);
-    ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"));  
+    ofFileDialogResult res = ofSystemSaveDialog("fingers.xml", "Choose where to save your profile");  //("Choose folder for saving profile", true, ofToDataPath("profiles"));
     if (res.bSuccess) {
         if (currentClassifier) {
             currentClassifier->save(res.getPath());
@@ -127,13 +127,10 @@ void mainAppController::saveFingerProfile(){
 }
 //--------------------------------------------------------------
 void mainAppController::loadFingerProfile(){
-    ofFileDialogResult res = ofSystemLoadDialog("Select profile folder", true, ofToDataPath("profiles"));//, false);
+    ofFileDialogResult res = ofSystemLoadDialog("Select profile", false, ofToDataPath("profiles"));//, false);
     if (res.bSuccess) {
-        ofFile f(res.getPath());
-        if (f.isDirectory()) {
-            if (currentClassifier) {
-                currentClassifier->load(res.getPath());
-            }
+        if (currentClassifier) {
+            currentClassifier->load(res.getPath());
         }
     }
 }

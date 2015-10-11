@@ -371,7 +371,7 @@ void BYBGui::keyPressed(ofKeyEventArgs& args){
             break;
         case 'S':
             if (controllerPtr->getClassifier()) {
-                controllerPtr->getClassifier()->save("fingers");
+                controllerPtr->getClassifier()->save("fingers.xml");
             }
             break;
         case '1':

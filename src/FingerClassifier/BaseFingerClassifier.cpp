@@ -179,25 +179,26 @@ void BaseFingersClassifier::update(vector<vector<float> >& data, vector<float>& 
 //cout << endl;
 }
 //-------------------------------------------------------------------------
-void BaseFingersClassifier::save(string directory) const {
-	ofDirectory dir(directory);
-	dir.create(true);
-	for(int i = 0; i < size(); i++) {
-		string filename = dir.path() + "/" + ofToString(fingers[i].getID()) + ".xml";
-		cout << "saving to " << filename << endl;
-		fingers[i].save(filename);
+void BaseFingersClassifier::save(string filename) const {
+    cout << "saving to " << filename << endl;
+    ofXml xml;
+    xml.addChild("Fingers");
+    xml.setTo("Fingers");
+    for(int i = 0; i < size(); i++) {
+        ofXml x = fingers[i].convertToXml();
+		xml.addXml(x);
 	}
+    xml.save(filename);
 }
 //-------------------------------------------------------------------------
-void BaseFingersClassifier::load(string directory, bool bNormalizeOnLoad) {
-	ofDirectory dir(directory);
-	dir.allowExt("xml");
-	dir.listDir();
-	for(int i = 0; i < dir.size(); i++){
-		int ind = ofToInt(dir.getName(i));
-		if (ind >= 0 && ind < fingers.size()) {
-            fingers[ind].reset();
-			fingers[ind].load(dir.getPath(i), bNormalizeOnLoad);
+void BaseFingersClassifier::load(string filename) {
+//	ofDirectory dir(directory);
+//	dir.allowExt("xml");
+    ofXml xml;
+    if(xml.load(filename)){
+        for(int i = 0; i < fingers.size(); i++){
+            fingers[i].reset();
+			fingers[i].load(xml);
 		}
 	}
 }
@@ -255,7 +256,9 @@ void BaseFingersClassifier::copyCalibratioFrom(BaseFingersClassifier* orig){
     if(orig){
     for (int i = 0; i < orig->size(); i++) {
         fingers[i].reset();
-        fingers[i] = orig->getFingers(i);
+        for (int j = 0; j < orig->fingers[i].size(); j++) {
+            addSample(orig->fingers[i].getExample(j), i);
+        }
     }
     }
 }

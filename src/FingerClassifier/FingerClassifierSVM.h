@@ -16,7 +16,7 @@ public:
     FingersClassifierSVM():lastClassifyTime(0), minClassifyTime(100){};
 	~FingersClassifierSVM(){};
     void setup(string language, shared_ptr<BYBGui> g);
-    void load(string directory);
+    void load(string filename);
 //	void update(vector<vector<float> >& data, vector<float>& loPass, peakData& p);
 	
     unsigned int classify(const vector<float>& sample);
@@ -25,7 +25,7 @@ public:
     void addSample(const vector<float>& sample, int index);
 	void endCalibration();
     void startCalibration();
-
+    void copyCalibratioFrom(BaseFingersClassifier* orig);
 protected:
 
     void normalizeAndAddToClassifier();

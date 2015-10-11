@@ -19,10 +19,11 @@ void FingersClassifierSVM::setup(string language, shared_ptr<BYBGui> g){
     
 }
 //-------------------------------------------------------------------------
-void FingersClassifierSVM::load(string directory){
-    BaseFingersClassifier::load(directory, true);
+void FingersClassifierSVM::load(string filename){
+    BaseFingersClassifier::load(filename);
     classifier.clearTrainingInstances();
     for (int i = 0; i < fingers.size(); i++) {
+        fingers[i].normalizeSamples();
         for (int j =0 ; j < fingers[i].size(); j++) {
             vector<double> sample;
             vector<float>& sf = fingers[i].getExample(j);
@@ -102,6 +103,11 @@ void FingersClassifierSVM::normalizeAndAddToClassifier(){
             classifier.addTrainingInstance(sampleD, index/5.0f);
         }
     }
+}
+//-------------------------------------------------------------------------
+void FingersClassifierSVM::copyCalibratioFrom(BaseFingersClassifier* orig){
+    BaseFingersClassifier::copyCalibratioFrom(orig);
+    normalizeAndAddToClassifier();
 }
 //-------------------------------------------------------------------------
 void FingersClassifierSVM::addSample(const vector<float>& sample, int index) {

@@ -18,8 +18,8 @@ class BaseFingersClassifier {
 public:
 
 	virtual void setup(string language, shared_ptr<BYBGui> g);
-	virtual void save(string directory) const;
-	virtual void load(string directory, bool bNormalizeOnLoad = false);
+	virtual void save(string filename) const;
+    virtual void load(string filename);
     virtual void updateCalibration(vector<vector<float> >& data, vector<float>& loPass, peakData& p);
 	virtual void updatePeakCalibration(peakData& p);
 	virtual unsigned int classify(const vector<float>& sample)=0;
@@ -40,7 +40,7 @@ public:
     
 	virtual bool isCalibrating(){return bCalibrating;}
 
-    void copyCalibratioFrom(BaseFingersClassifier* orig);
+    virtual void copyCalibratioFrom(BaseFingersClassifier* orig);
     
     vector<int> getClassifyHist();
     
