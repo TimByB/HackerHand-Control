@@ -7,7 +7,7 @@
 //
 
 #include "BYBGui.h"
-#include "ofApp.h"
+#include "mainAppController.h"
 //--------------------------------------------------------------
 void BYBGui::setup( string language){
     bAccuracyTestRunning = false;

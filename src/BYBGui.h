@@ -20,7 +20,7 @@
 
 #include "handFingers.h"
 
-class ofApp;
+class mainAppController;
 
 
 class BYBGui {
@@ -87,7 +87,7 @@ public:
 
     void windowResized(ofResizeEventArgs& args);
 	
-	shared_ptr<ofApp> controllerPtr;
+	shared_ptr<mainAppController> controllerPtr;
 	
 	
 	BYBAccuracyGui accuracyGui;

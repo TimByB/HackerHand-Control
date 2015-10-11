@@ -1,10 +1,10 @@
-#include "ofApp.h"
+#include "mainAppController.h"
 #include "ofxModifierKeys.h"
 #include "BYBGui.h"
 #include "loPass.h"
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void mainAppController::setup(){
     
     currentClassifier = NULL;
     ofSetVerticalSync(true);
@@ -37,14 +37,14 @@ void ofApp::setup(){
     classifierEuc.setup(lang, gui);
     serial.setup();
     
-    ofAddListener(serial.newDataEvent, this, &ofApp::newSerialData);
+    ofAddListener(serial.newDataEvent, this, &mainAppController::newSerialData);
     setClassifier(0);
     
     peakDet.setup();
 
 }
 //--------------------------------------------------------------
-void ofApp::setClassifier(int i){
+void mainAppController::setClassifier(int i){
     BaseFingersClassifier * nextClass = NULL;
     switch (i) {
         case 0:
@@ -75,11 +75,11 @@ void ofApp::setClassifier(int i){
     }
 }
 //--------------------------------------------------------------
-BaseFingersClassifier* ofApp::getClassifier(){
+BaseFingersClassifier* mainAppController::getClassifier(){
     return currentClassifier;
 }
 //--------------------------------------------------------------
-void ofApp::newSerialData(vector<unsigned int> & d){
+void mainAppController::newSerialData(vector<unsigned int> & d){
     vector<float>lp;
     lp.resize(NUM_GRAPHS, 0.0f);
     // cout << "loPassData Size: " << loPassData[0].size() <<endl;
@@ -101,22 +101,22 @@ void ofApp::newSerialData(vector<unsigned int> & d){
     }
 }
 //--------------------------------------------------------------
-void ofApp::startCalibration(){
+void mainAppController::startCalibration(){
     if (currentClassifier) {
         currentClassifier->startCalibration();
     }
 }
 //--------------------------------------------------------------
-void ofApp::update(){
+void mainAppController::update(){
     serial.update();
 }
 //--------------------------------------------------------------
-void ofApp::draw(){
+void mainAppController::draw(){
     ofBackground(0);
     gui->draw();
 }
 //--------------------------------------------------------------
-void ofApp::saveFingerProfile(){
+void mainAppController::saveFingerProfile(){
 //    ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"), true);
     ofFileDialogResult res = ofSystemLoadDialog("Choose folder for saving profile", true, ofToDataPath("profiles"));  
     if (res.bSuccess) {
@@ -126,7 +126,7 @@ void ofApp::saveFingerProfile(){
     }
 }
 //--------------------------------------------------------------
-void ofApp::loadFingerProfile(){
+void mainAppController::loadFingerProfile(){
     ofFileDialogResult res = ofSystemLoadDialog("Select profile folder", true, ofToDataPath("profiles"));//, false);
     if (res.bSuccess) {
         ofFile f(res.getPath());

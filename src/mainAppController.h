@@ -8,7 +8,7 @@
 
 class BYBGui;
 
-class ofApp : public ofBaseApp{
+class mainAppController : public ofBaseApp{
 	
 public:
 	void setup();

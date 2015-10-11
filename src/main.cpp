@@ -3,32 +3,24 @@
 class ofApp;
 class BYBGui;
 #include "BYBGui.h"
-#include "ofApp.h"
+#include "mainAppController.h"
 #include "BYBOverlayGui.h"
-//#include "ofAppGlutWindow.h"
+
 
 //========================================================================
 
 
 int main( ){
 #ifdef TARGET_OSX
+    //this allows to embed all the data folder inside the app bundle.
     string newRoot = "../Resources/data/";
     ofEnableDataPath();
     ofSetDataPathRoot(newRoot);
 #endif
-//	ofAppGlutWindow window;
-	//ofSetupOpenGL(&window, 1024,768,OF_WINDOW);			// <-------- setup the GL context
-	ofSetupOpenGL(1024,768,OF_WINDOW);
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-    //map<string,ofTrueTypeFont> fonts;
-    
-	//	fonts["HelveticaNeueLTStd-Md"].load("fonts/HelveticaNeueLTStd-Md.otf", 15);
-	
-	//BYBOverlayGui::fonts = fonts;
 
-	shared_ptr<ofApp> mainApp (new ofApp);
+    ofSetupOpenGL(1024,768,OF_WINDOW);
+
+	shared_ptr<mainAppController> mainApp (new mainAppController);
 	shared_ptr<BYBGui> gui (new BYBGui);
 	mainApp->gui = gui;
 	gui->controllerPtr = mainApp;
@@ -47,8 +39,6 @@ int main( ){
             gui->fonts[ofFilePath::removeExt(dir.getName(i)) + "_25"] = f;
         }
     }
-
-
     
     try{
 	ofRunApp(mainApp);
