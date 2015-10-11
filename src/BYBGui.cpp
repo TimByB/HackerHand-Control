@@ -44,8 +44,6 @@ void BYBGui::setup( string language){
         }
         
     }
-    
-   // graphs.resize(NUM_GRAPHS);
     for (int i = 0; i < NUM_GRAPHS; i++) {
         graphs[i].setup(ofGetWidth()-5, (string)((fingerNames.count(i)>0)?fingerNames[i]:""));
         graphs[i].setFont(fonts);
@@ -164,59 +162,14 @@ void BYBGui::slopeThresholdChanged(float & f){
 //--------------------------------------------------------------
 void BYBGui::update(vector<float> & v, const peakData& p){
     bNewPeak = p.bPeakFound;
+    for (int i = 0; i < p.peakIndices.size(); i++) {
+        graphs[p.peakIndices[i]].addPeak(p.peakDetSize);
+    }
 
     for (int i =0; i < NUM_GRAPHS && i < v.size(); i++) {
         graphs[i].update(v[i]);
     }
-    for (int i = 0; i < p.peakIndices.size(); i++) {
-        graphs[p.peakIndices[i]].addPeak(p.peakDetSize);
-    }
     
-}
-//--------------------------------------------------------------
-void BYBGui::updateLoPass(){
-    const vector< vector<float> > & originalData = controllerPtr->getOriginalData();
-    for (int i = 0; i < NUM_GRAPHS && i<originalData.size(); i++) {
-#ifdef USE_SHARED_PTR_DATA
-        for (int k =0; k < originalData[i].size() && k < graphs[i].data->size(); k++) {
-#else
-        for (int k =0; k < originalData[i].size() && k < graphs[i].data.size(); k++) {
-#endif
-            if (bUseLoPass) {
-                if (k > 0) {
-#ifdef USE_SHARED_PTR_DATA
-                    graphs[i].data->at(k) = originalData[i].at(k) * loPassFactor + (1 - loPassFactor) * graphs[i].data->at(k-1);
-                }else {
-                    graphs[i].data->at(0) = originalData[i].at(0);
-#else
-                    graphs[i].data[k] = originalData[i][k] * loPassFactor + (1 - loPassFactor) * graphs[i].data[k-1];
-                }else {
-                    graphs[i].data[0] = originalData[i][0];        
-#endif
-                }
-            }else{
-                if (k <lopassSize) {
-#ifdef USE_SHARED_PTR_DATA
-                    graphs[i].data->at(k) = originalData[i][k];
-#else
-                    graphs[i].data[k] = originalData[i][k];
-#endif
-                }else{
-                    float sum = 0;
-                    for(int j = 0; j < lopassSize; j++){
-                        sum += originalData[i][k-j];
-                    }
-#ifdef USE_SHARED_PTR_DATA
-                    graphs[i].data->at(k)=sum/lopassSize;
-#else
-                    graphs[i].data[k]=sum/lopassSize;
-#endif
-                }
-            }
-        }
-        graphs[i].resetMinMax();
-        graphs[i].updateMesh();
-    }
 }
 //--------------------------------------------------------------
 void BYBGui::moveFinger (int & f){
@@ -254,7 +207,6 @@ void BYBGui::draw(){
     if (getIsCalibrating() || bAccuracyTestRunning) {
         p = selectedGraph;
     }else{
-        //p = controllerPtr->getClassifier()->getPrimaryFinger();
         p = selectedFinger;
         handImg.selectFinger(selectedFinger);
     }
@@ -291,17 +243,11 @@ void BYBGui::draw(){
 }
 //--------------------------------------------------------------
 void BYBGui::loPassChangedF(float & f){
-    updateLoPass();
-#ifndef TEST_PEAK_DET_CLASS
-    updatePeakDetection();
-#endif
+
 }
 //--------------------------------------------------------------
 void BYBGui::loPassChangedI(int & i){
-    updateLoPass();
-#ifndef TEST_PEAK_DET_CLASS
-    updatePeakDetection();
-#endif
+
 }
 //--------------------------------------------------------------
 void BYBGui::selectGraph(int i){
@@ -321,7 +267,7 @@ void BYBGui::selectGraph(int i){
         }
     }
     handImg.selectFinger(selectedGraph);
-    cout << "selectGraph("<<selectedGraph << ");" << endl;
+//    cout << "selectGraph("<<selectedGraph << ");" << endl;
     
 }
 //--------------------------------------------------------------
@@ -335,10 +281,6 @@ bool BYBGui::getIsCalibrating(){
 }
 //--------------------------------------------------------------
 void BYBGui::useLoPassChanged(bool & b){
-    updateLoPass();
-#ifndef TEST_PEAK_DET_CLASS
-    updatePeakDetection();
-#endif
 }
 //--------------------------------------------------------------
 void BYBGui::opacityChanged(int& i){

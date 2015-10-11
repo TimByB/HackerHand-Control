@@ -71,8 +71,6 @@ bool peakDetector::searchForPeak(vector<vector<float> >& data, int i, int& k, in
     bool isMax = true;
     bool bPeakFound = false;
     
-//    peakData p;
-//    for (int i = 0; i < data.size(); i++) {
         for (int j = k-pds; j < k +pds; j++) {
             if (data[i][j] > data[i][k]) {
                 isMax = false;
@@ -81,13 +79,10 @@ bool peakDetector::searchForPeak(vector<vector<float> >& data, int i, int& k, in
         if (isMax) {
             if (data[i][k] - data[i][k-pds] > pat &&
                 data[i][k] - data[i][k+pds] > pdt) {
-  //              p.data.push_back(data[i][k]);
-                //graphs[i].addPeak(k);
-                cout << "Peak Found!" << endl;
+      //          cout << "Peak Found!" << endl;
                 bPeakFound = true;
             }
         }
-    ///}
     return  bPeakFound;
 }
 //--------------------------------------------------------------

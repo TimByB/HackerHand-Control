@@ -59,8 +59,6 @@ public:
 	void drawGraphs();
 	void drawGraph(int i);
 
-
-    void updateLoPass();
 	ofImage logo;
 
 	graph1D graphs [NUM_GRAPHS];
