@@ -9,7 +9,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "graph.h"
-//#include "ofApp.h"
+
 #include "button.h"
 #include "BYB_Constants.h"
 #define MARGIN 3
@@ -22,7 +22,6 @@
 
 class ofApp;
 
-#define TEST_PEAK_DET_CLASS
 
 class BYBGui {
 public:
