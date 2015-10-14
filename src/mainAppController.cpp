@@ -25,11 +25,10 @@ void mainAppController::setup(){
     for (int i = 0; i < NUM_GRAPHS; i++) {
         originalData[i].resize(ofGetWidth());
         loPassData[i].resize(ofGetWidth());
-#ifdef USE_SHARED_PTR_DATA
         graphData[i] = shared_ptr<vector<float> >(new vector<float>);
         graphData[i]->resize(ofGetWidth());
         gui->graphs[i].data = graphData[i];
-#endif
+
     }
     gui->gui.add(peakDet.parameters);
     gui->setup(lang);
@@ -88,9 +87,9 @@ void mainAppController::newSerialData(vector<unsigned int> & d){
         originalData[i].back() = d[i];
         memcpy(loPassData[i].data(), loPassData[i].data()+1, (loPassData[i].size()-1)*sizeof(float));
         loPassData[i].back() = loPass(originalData[i], gui->lopassSize);
-#ifdef USE_SHARED_PTR_DATA
+
         memcpy(graphData[i]->data(), loPassData[i].data(), loPassData[i].size()*sizeof(float));
-#endif
+
         lp[i] = loPassData[i].back();
     }
     if (currentClassifier) {
