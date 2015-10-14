@@ -69,7 +69,7 @@ public:
 	ofxPanel gui;
 
     ofParameter<int> lopassSize, numSamples, overlayOpacity, releaseTime;
-    ofParameter<bool> bUseLoPass;
+    ofParameter<bool> bUseLoPass, bUseKeys;
     ofParameter<float> loPassFactor, slopeThreshold, releaseThreshold;
 
 

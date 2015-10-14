@@ -105,7 +105,7 @@ void BYBGui::setupParameters(){
     gui.add(overlayOpacity.set("overlay GUI opacity", 255, 0, 255));
     gui.add(releaseTime.set("Release Time", 500, 1, 2000));
     gui.add(releaseThreshold.set("Release Threshold", 0.5, 0, 1));
-    
+    gui.add(bUseKeys.set("Use Keys", false));
     
     overlayOpacity.addListener(this, &BYBGui::opacityChanged);
     
@@ -341,39 +341,32 @@ void BYBGui::windowResized(ofResizeEventArgs& args){
 }
 //--------------------------------------------------------------
 void BYBGui::keyPressed(ofKeyEventArgs& args){
+    if (bUseKeys) {
+        switch (args.key) {
+            case 'r':
+                for (int i = 0; i < NUM_GRAPHS; i++) {
+                    graphs[i].resetMinMax();
+                }
+                break;
+            case 's':
+                controllerPtr->serial.saveData();
+                break;
+            case 'g':
+                bDrawGui ^= true;
+                break;
+            case 'l':
+                controllerPtr->serial.loadOfflineData();
+                break;
+            case 'S':
+                if (controllerPtr->getClassifier()) {
+                    controllerPtr->getClassifier()->save("fingers.xml");
+                }
+                break;
+            default:
+                break;
+        }
+    }
     switch (args.key) {
-        case ' ':
-            //	bUpdateGraphs ^= true;
-            break;
-        case 'r':
-            for (int i = 0; i < NUM_GRAPHS; i++) {
-                graphs[i].resetMinMax();
-            }
-            break;
-        case 'a':
-            //addFinger();
-            break;
-        case 's':
-            //controllerPtr->saveFingerProfile();
-            controllerPtr->serial.saveData();
-            break;
-        case 'n':
-            //addFinger(true);
-            break;
-        case 'w':
-            //controllerPtr->serial.saveData();
-            break;
-        case 'g':
-            bDrawGui ^= true;
-            break;
-        case 'l':
-            controllerPtr->serial.loadOfflineData();
-            break;
-        case 'S':
-            if (controllerPtr->getClassifier()) {
-                controllerPtr->getClassifier()->save("fingers.xml");
-            }
-            break;
         case '1':
         case '2':
         case '3':
