@@ -8,7 +8,7 @@ If you wish to install and use this software only please download the compiled v
 
 
 ######Compiling
-If you want to modify this software, thus having to compile it you must first install the following.
+If you want to modify this software, thus having to compile it, you must first install the following.
 
 1. [OpenFrameworks v0.84](http://openframeworks.cc/download/)
 2. The required openFrameworks addons
