@@ -12,7 +12,7 @@
 
 #include "button.h"
 #include "BYB_Constants.h"
-#define MARGIN 3
+#define MARGIN 6
 
 #include "peakData.h"
 #include "BYBAccuracyGui.h"
@@ -36,8 +36,9 @@ public:
 	
 	void draw();
 	ofRectangle guiArea, logoRect;
-	button loadButton, saveButton, calibrateButton, accuracyButton, eucButton, svmButton;
+	button loadButton, saveButton, calibrateButton, accuracyButton, eucButton, svmButton, arduinoButton;
 
+    void arduinoButtonPressed();
 	void loadButtonPressed();
 	void saveButtonPressed();
 	void calibrateButtonPressed();

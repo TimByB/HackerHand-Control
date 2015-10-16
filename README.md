@@ -32,6 +32,8 @@ Reads the 5 Analog Input Channels (the amplified EMG signals-Analog In 0-4) and 
 ###Computer Software
 The software is written in Open Frameworks, an open C++ tool. The Arduino + 5 Channel EMG SpikerShield must be plugged into your computer for the Software to Correctly Load.
 
+It is very important that the arduino software is not running when you start the HackerHand Control software.
+
 ####How to use
 -To manually move the HackerHand fingers, press keys 1 (thumb), 2 (index), 3 (middle), 4 (ring), and 5 (pinky) to get the fingers to contract. Pressing the numbers again will relax the fingers. 
 -To reset the levels on the visualization, press “r” on the keypad

@@ -42,6 +42,9 @@ void BYBGui::setup( string language){
         if (xml.exists("euc")) {
             eucButton.name = xml.getValue("euc");
         }
+        if (xml.exists("arduino")) {
+            arduinoButton.name = xml.getValue("arduino");
+        }
         
     }
     for (int i = 0; i < NUM_GRAPHS; i++) {
@@ -125,13 +128,17 @@ void BYBGui::setupButtons(){
     saveButton.font = fonts["FiraSans-Heavy"];
     calibrateButton.font = fonts["FiraSans-Heavy"];
     accuracyButton.font = fonts["FiraSans-Heavy"];
+    arduinoButton.font = fonts["FiraSans-Heavy"];
     
-    loadButton.set(guiArea.getMaxX() -200 - 10, 15 + MARGIN, 200, 40);
-    saveButton.set(guiArea.getMaxX() -200 - 10, 65 + MARGIN, 200, 40);
-    calibrateButton.set(loadButton.getX() - 200 - 10, 15 + MARGIN, 200, 40);
-    accuracyButton.set(loadButton.getX() - 200 - 10, 65 + MARGIN, 200, 40);
-    eucButton.set(loadButton.getX() - 200 - 10, 115 + MARGIN, 200, 20);
-    svmButton.set(guiArea.getMaxX() -200 - 10, 115 + MARGIN, 200, 20);
+    int buttonWidth = 180;
+    
+    loadButton.set(guiArea.getMaxX() -buttonWidth - 10, 15 + MARGIN, buttonWidth, 20);
+    saveButton.set(guiArea.getMaxX() -buttonWidth - 10, loadButton.getMaxY() + MARGIN, buttonWidth, 20);
+    calibrateButton.set(loadButton.getX() - buttonWidth - 10, 15 + MARGIN, buttonWidth, 20);
+    accuracyButton.set(loadButton.getX() - buttonWidth - 10, calibrateButton.getMaxY() + MARGIN, buttonWidth, 20);
+    eucButton.set(loadButton.getX() - buttonWidth - 10, accuracyButton.getMaxY() + MARGIN, buttonWidth, 20);
+    svmButton.set(guiArea.getMaxX() -buttonWidth - 10, accuracyButton.getMaxY() + MARGIN, buttonWidth, 20);
+    arduinoButton.set(guiArea.getMaxX() -buttonWidth - 10, svmButton.getMaxY() + MARGIN, buttonWidth, 20);
     
     ofAddListener(loadButton.clickedEvent, this, &BYBGui::loadButtonPressed);
     ofAddListener(saveButton.clickedEvent, this, &BYBGui::saveButtonPressed);
@@ -139,6 +146,11 @@ void BYBGui::setupButtons(){
     ofAddListener(accuracyButton.clickedEvent, this, &BYBGui::accuracyButtonPressed);
     ofAddListener(eucButton.clickedEvent, this, &BYBGui::eucButtonPressed);
     ofAddListener(svmButton.clickedEvent, this, &BYBGui::svmButtonPressed);
+    ofAddListener(arduinoButton.clickedEvent, this, &BYBGui::arduinoButtonPressed);
+}
+//--------------------------------------------------------------
+void BYBGui::arduinoButtonPressed(){
+    ofSystem("open " + ofToDataPath("arduino/HackerHand_v2.3/") );
 }
 //--------------------------------------------------------------
 void BYBGui::eucButtonPressed(){
@@ -230,6 +242,7 @@ void BYBGui::draw(){
     accuracyButton.draw();
     eucButton.draw();
     svmButton.draw();
+    arduinoButton.draw();
     if (!getIsCalibrating()){
         handImg.draw(ofColor::orange);
     }
